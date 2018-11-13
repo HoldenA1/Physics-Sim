@@ -54,4 +54,12 @@ public class Vector2D {
 	public void setY(float y) {
 		this.y = y;
 	}
+	
+	public static Vector2D divide(Vector2D vec1, Vector2D vec2) {
+		return new Vector2D(vec1.X()/vec2.X(), vec1.Y()/vec2.Y());
+	}
+	
+	public static Vector2D divide(Vector2D vec, float scalar) {
+		return new Vector2D(vec.X()/scalar, vec.Y()/scalar);
+	}
 }

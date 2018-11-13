@@ -12,7 +12,7 @@ public class Main extends JPanel {
 	// Frame variables
 	final static String NAME = "Physics Simulation";
 	private static final long serialVersionUID = 1L;
-	public final static double SCALE = 20; // Pixels per meter
+	public final static double SCALE = 5; // Pixels per meter
 	
 	// Update loop variables
 	long lastTime = System.nanoTime();
@@ -24,7 +24,14 @@ public class Main extends JPanel {
 	public static final float realTimeUPS = 50.0f;
 	static double ups = 50.0;
 	
-	Block m1 = new Block(10.0, new Vector2D(4,3), new Vector2D(1,1), new Vector2D(0.3f,0), 2, 2);
+	// Constants
+	final float g = 9.8f;
+	
+	Block m1 = new Block(10.0f, new Vector2D(4,3), new Vector2D(10,0), null, 2, 2);
+	
+	public Main() {
+		m1.addForce(new Vector2D(0,g));
+	}
 	
 	public static void main(String[] args) {
 		Window frame = new Window(NAME);	

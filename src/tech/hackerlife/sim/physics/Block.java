@@ -16,7 +16,7 @@ public class Block extends Matter {
 	 * @param width In meters
 	 * @param height In meters
 	 */
-	public Block(double mass, Vector2D position, Vector2D velocity, Vector2D acceleration, int width, int height) {
+	public Block(float mass, Vector2D position, Vector2D velocity, Vector2D acceleration, int width, int height) {
 		super(mass, position, velocity, acceleration);
 		this.width = width;
 		this.height = height;
