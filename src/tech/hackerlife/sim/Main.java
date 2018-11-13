@@ -24,7 +24,7 @@ public class Main extends JPanel {
 	public static final float realTimeUPS = 50.0f;
 	static double ups = 50.0;
 	
-	Block m1 = new Block(10.0, new Vector2D(4,3), new Vector2D(1,0), null, 5, 2);
+	Block m1 = new Block(10.0, new Vector2D(4,3), new Vector2D(1,1), new Vector2D(0.3f,0), 2, 2);
 	
 	public static void main(String[] args) {
 		Window frame = new Window(NAME);	

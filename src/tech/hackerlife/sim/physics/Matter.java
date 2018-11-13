@@ -37,9 +37,9 @@ abstract class Matter {
 	}
 	
 	public void update() {
-//		Vector2D scaledAcceleration = acceleration;
-//		scaledAcceleration.divide(Main.realTimeUPS);
-//		velocity.add(scaledAcceleration);
+		Vector2D scaledAcceleration = new Vector2D(acceleration.X(),acceleration.Y());;
+		scaledAcceleration.divide(Main.realTimeUPS);
+		velocity.add(scaledAcceleration);
 		
 		Vector2D scaledVelocity = new Vector2D(velocity.X(),velocity.Y());
 		scaledVelocity.divide(Main.realTimeUPS);
