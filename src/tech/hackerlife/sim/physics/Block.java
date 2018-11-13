@@ -33,10 +33,5 @@ public class Block extends Matter {
 		// Draws object
 		g.fillRect(x, y, w, h);
 	}
-
-	@Override
-	public void update() {
-		
-	}
 	
 }
