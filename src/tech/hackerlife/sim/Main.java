@@ -3,7 +3,9 @@ package tech.hackerlife.sim;
 import tech.hackerlife.sim.display.*;
 
 public class Main {
-	public static final String NAME = "Physics Simulation";
+	final static String NAME = "Physics Simulation";
+	public final static double SCALE = 20; // Pixels per meter
+	
 
 	public static void main(String[] args) {
 		Window frame = new Window(NAME);

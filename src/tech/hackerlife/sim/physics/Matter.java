@@ -26,4 +26,6 @@ abstract class Matter {
 	}
 	
 	public abstract void draw(Graphics g);
+	
+	public abstract void update();
 }
