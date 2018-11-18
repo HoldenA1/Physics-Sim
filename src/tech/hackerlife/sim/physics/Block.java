@@ -11,7 +11,21 @@ public class Block extends Matter {
 	 * @param mass In kilograms
 	 * @param position In meters
 	 * @param velocity In meters per second
-	 * @param acceleration In meters per second squared
+	 * @param width In meters
+	 * @param height In meters
+	 */
+	public Block(float mass, Vector2D position, Vector2D velocity, int width, int height) {
+		super(mass, position, velocity, null);
+		this.width = width;
+		this.height = height;
+	}
+	
+	/**
+	 * putting null for a vector means zero
+	 * @param mass In kilograms
+	 * @param position In meters
+	 * @param velocity In meters per second
+	 * @param acceleration Only works if no forces are added (in m/s/s)
 	 * @param width In meters
 	 * @param height In meters
 	 */
@@ -25,6 +39,7 @@ public class Block extends Matter {
 	public void draw(Graphics g, float scale) {
 		
 //		drawForces(g, scale);
+		drawAcceleration(g, scale);
 		drawVelocity(g, scale);
 		
 		// Translates from world-space to screen-space

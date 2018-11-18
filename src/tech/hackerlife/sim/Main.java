@@ -3,10 +3,9 @@ package tech.hackerlife.sim;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
-import gui.GUIManager;
-import gui.Mouse;
-import gui.button.Button;
 import tech.hackerlife.sim.display.*;
+import tech.hackerlife.sim.gui.*;
+import tech.hackerlife.sim.gui.button.Button;
 import tech.hackerlife.sim.maths.Vector2D;
 import tech.hackerlife.sim.physics.Block;
 
@@ -23,20 +22,25 @@ public class Main extends JPanel {
 	final double ns = 1000000000.0 / ups;
 	double delta = 0;
 	int updates = 0;
-	// Updates a second - 50.0 is real-time
+	
+	// Game speed - 50.0 is real-time
 	public static final float realTimeUPS = 50.0f;
 	static double ups = 50.0;
 	
 	// Constants
 	final float g = 9.8f;
 	
-	Block m1 = new Block(10.0f, new Vector2D(4,30), new Vector2D(7, -20), null, 2, 2);
+	// GUI Objects
 	GUIManager b = new GUIManager();
 	Mouse  m = new Mouse();
 	Button button = new Button("button", 100, 100);
 	
+	// Physics objects
+	float mass = 10;//kg
+	Block m1 = new Block(10.0f, new Vector2D(4,30), new Vector2D(7, -20), 2, 2);
+	
 	public Main() {
-		m1.addForce(new Vector2D(0,g*10));
+		m1.addForce(new Vector2D(0,g*mass));
 		b.add(button);
 	}
 	

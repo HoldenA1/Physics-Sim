@@ -56,6 +56,15 @@ abstract class Matter {
 		g.setColor(temp);
 	}
 	
+	public void drawAcceleration(Graphics g, float scale) {
+		Color temp = g.getColor();
+		g.setColor(Color.RED);
+		
+		acceleration.drawVector(g, position, scale);
+		
+		g.setColor(temp);
+	}
+	
 	public void drawVelocity(Graphics g, float scale) {
 		Color temp = g.getColor();
 		g.setColor(Color.GREEN);
