@@ -1,6 +1,9 @@
 package tech.hackerlife.sim.physics;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
+
 import tech.hackerlife.sim.Main;
 import tech.hackerlife.sim.maths.Vector2D;
 
@@ -9,7 +12,8 @@ abstract class Matter {
 	Vector2D position;
 	Vector2D velocity;
 	Vector2D acceleration;
-	Vector2D force = new Vector2D(0,0);
+	Vector2D forcesSum = new Vector2D(0,0);
+	ArrayList<Vector2D> forces = new ArrayList<Vector2D>();
 	
 	public Matter(float mass, Vector2D position, Vector2D velocity, Vector2D acceleration) {
 		if (position == null) {
@@ -38,12 +42,32 @@ abstract class Matter {
 	}
 	
 	public void addForce(Vector2D force) {
-		this.force.add(force);
+		forces.add(force);
+		forcesSum.add(force);
+	}
+	
+	public void drawForces(Graphics g, float scale) {
+		Color temp = g.getColor();
+		g.setColor(Color.YELLOW);
+		
+		for (Vector2D force: forces) {
+			force.drawVector(g, position, scale);
+		}
+		g.setColor(temp);
+	}
+	
+	public void drawVelocity(Graphics g, float scale) {
+		Color temp = g.getColor();
+		g.setColor(Color.GREEN);
+		
+		velocity.drawVector(g, position, scale);
+		
+		g.setColor(temp);
 	}
 	
 	public void update() {
 		// Update acceleration
-		acceleration = Vector2D.divide(force, mass);
+		acceleration = Vector2D.divide(forcesSum, mass);
 		
 		// Update velocity
 		velocity.add(Vector2D.divide(acceleration, Main.realTimeUPS));
@@ -64,6 +88,6 @@ abstract class Matter {
 		return acceleration;
 	}
 	
-	public abstract void draw(Graphics g);
+	public abstract void draw(Graphics g, float scale);
 	
 }

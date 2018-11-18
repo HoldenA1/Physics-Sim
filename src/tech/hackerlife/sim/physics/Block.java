@@ -1,14 +1,13 @@
 package tech.hackerlife.sim.physics;
 
 import java.awt.Graphics;
-
-import tech.hackerlife.sim.Main;
 import tech.hackerlife.sim.maths.Vector2D;
 
 public class Block extends Matter {
 	int width, height;
 	
 	/**
+	 * putting null for a vector means zero
 	 * @param mass In kilograms
 	 * @param position In meters
 	 * @param velocity In meters per second
@@ -23,15 +22,22 @@ public class Block extends Matter {
 	}
 
 	@Override
-	public void draw(Graphics g) {
+	public void draw(Graphics g, float scale) {
+		
+//		drawForces(g, scale);
+		drawVelocity(g, scale);
+		
 		// Translates from world-space to screen-space
-		int x = (int) (position.X() * Main.SCALE);
-		int y = (int) (position.Y() * Main.SCALE);
-		int w = (int) (width * Main.SCALE);
-		int h = (int) (height * Main.SCALE);
+		Vector2D scaledPos = Vector2D.mult(position, scale);
+		int scaledWidth = (int) (width * scale);
+		int scaleHeight = (int) (height * scale);
+	
+		// Translates the center of the block to pos
+		int x = (int) (scaledPos.X() - (0.5 * scaledWidth));
+		int y = (int) (scaledPos.Y() - (0.5 * scaleHeight));
 		
 		// Draws object
-		g.fillRect(x, y, w, h);
+		g.fillRect(x, y, scaledWidth, scaleHeight);
 	}
 	
 }

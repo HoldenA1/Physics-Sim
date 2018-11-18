@@ -3,6 +3,9 @@ package tech.hackerlife.sim;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
+import gui.GUIManager;
+import gui.Mouse;
+import gui.button.Button;
 import tech.hackerlife.sim.display.*;
 import tech.hackerlife.sim.maths.Vector2D;
 import tech.hackerlife.sim.physics.Block;
@@ -12,7 +15,7 @@ public class Main extends JPanel {
 	// Frame variables
 	final static String NAME = "Physics Simulation";
 	private static final long serialVersionUID = 1L;
-	public final static double SCALE = 5; // Pixels per meter
+	public final static float SCALE = 10; // Pixels per meter
 	
 	// Update loop variables
 	long lastTime = System.nanoTime();
@@ -27,10 +30,14 @@ public class Main extends JPanel {
 	// Constants
 	final float g = 9.8f;
 	
-	Block m1 = new Block(10.0f, new Vector2D(4,3), new Vector2D(10,0), null, 2, 2);
+	Block m1 = new Block(10.0f, new Vector2D(4,30), new Vector2D(7, -20), null, 2, 2);
+	GUIManager b = new GUIManager();
+	Mouse  m = new Mouse();
+	Button button = new Button("button", 100, 100);
 	
 	public Main() {
-		m1.addForce(new Vector2D(0,g));
+		m1.addForce(new Vector2D(0,g*10));
+		b.add(button);
 	}
 	
 	public static void main(String[] args) {
@@ -42,7 +49,9 @@ public class Main extends JPanel {
 		super.paintComponent(g);
 		this.setBackground(Color.LIGHT_GRAY);
 		
-		m1.draw(g);
+		m1.draw(g, SCALE);
+		
+		b.updateElements(g, this, m);
 		
 		// This is the update loop
 		long now = System.nanoTime();
