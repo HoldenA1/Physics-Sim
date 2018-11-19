@@ -1,4 +1,4 @@
-package tech.hackerlife.sim.gui;
+package tech.hackerlife.sim.display.gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -25,16 +25,14 @@ public abstract class GUIElement {
 		this.mainColor = DEFAULT_COLOR;
 	}
 	
-	public GUIElement(String label, int x, int y, int width, int height, Color mainColor, boolean lightText) {
-		this.label = label;
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+	public GUIElement withColor(Color mainColor) {
 		this.mainColor = mainColor;
-		if (lightText) {
-			textColor = Color.WHITE;
-		}
+		return this;
+	}
+	
+	public GUIElement lightText() {
+		textColor = Color.WHITE;
+		return this;
 	}
 	
 	public abstract void update(Graphics g, Point mouse, boolean mousePressed);

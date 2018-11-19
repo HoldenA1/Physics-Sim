@@ -1,5 +1,6 @@
 package tech.hackerlife.sim.physics;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import tech.hackerlife.sim.maths.Vector2D;
 
@@ -7,32 +8,26 @@ public class Block extends Matter {
 	int width, height;
 	
 	/**
-	 * putting null for a vector means zero
 	 * @param mass In kilograms
 	 * @param position In meters
-	 * @param velocity In meters per second
+	 * @param velocity In meters per second (put null for 0)
 	 * @param width In meters
 	 * @param height In meters
 	 */
 	public Block(float mass, Vector2D position, Vector2D velocity, int width, int height) {
-		super(mass, position, velocity, null);
+		super(mass, position, velocity);
 		this.width = width;
 		this.height = height;
 	}
 	
-	/**
-	 * putting null for a vector means zero
-	 * @param mass In kilograms
-	 * @param position In meters
-	 * @param velocity In meters per second
-	 * @param acceleration Only works if no forces are added (in m/s/s)
-	 * @param width In meters
-	 * @param height In meters
-	 */
-	public Block(float mass, Vector2D position, Vector2D velocity, Vector2D acceleration, int width, int height) {
-		super(mass, position, velocity, acceleration);
-		this.width = width;
-		this.height = height;
+	public Block withAcceleration(Vector2D acceleraton) {
+		super.withAcceleration(acceleraton);
+		return this;
+	}
+	
+	public Block withColor(Color color) {
+		super.withColor(color);
+		return this;
 	}
 
 	@Override
@@ -52,6 +47,7 @@ public class Block extends Matter {
 		int y = (int) (scaledPos.Y() - (0.5 * scaleHeight));
 		
 		// Draws object
+		g.setColor(color);
 		g.fillRect(x, y, scaledWidth, scaleHeight);
 	}
 	

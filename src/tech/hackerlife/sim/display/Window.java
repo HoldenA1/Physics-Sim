@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 public class Window extends JFrame {
 	private static final long serialVersionUID = 1L;
-	final int WIDTH = 640, HEIGHT = 480;
+	final int DEFAULT_WIDTH = 640, DEFAULT_HEIGHT = 480;
 	
 	public Window(String name) {
 		super(name);

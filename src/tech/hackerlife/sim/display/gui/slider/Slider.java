@@ -1,9 +1,9 @@
-package tech.hackerlife.sim.gui.slider;
+package tech.hackerlife.sim.display.gui.slider;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import tech.hackerlife.sim.gui.GUIElement;
+import tech.hackerlife.sim.display.gui.GUIElement;
 
 public class Slider extends GUIElement {
 	private int value = 0;
@@ -21,16 +21,14 @@ public class Slider extends GUIElement {
 		barWidth = (int)(height/3);
 	}
 	
-	public Slider(String label, int x, int y, Color boxColor, boolean lightText) {
-		super(label, x, y, (label.length()+2)*CHAR_SIZE, DEFAULT_ELEMENT_SIZE, boxColor, lightText);
-		sliderPosition = x;
-		barWidth = (int)(height/3);
+	public Slider withColor(Color color) {
+		super.withColor(color);
+		return this;
 	}
 	
-	public Slider(String label, int x, int y, int width, int height, Color boxColor, boolean lightText) {
-		super(label, x, y, width, height, boxColor, lightText);
-		sliderPosition = x;
-		barWidth = (int)(height/3);
+	public Slider lightText() {
+		super.lightText();
+		return this;
 	}
 
 	public void update(Graphics g, Point mouse, boolean mousePressed) {

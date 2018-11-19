@@ -4,15 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 import tech.hackerlife.sim.display.*;
-import tech.hackerlife.sim.gui.*;
-import tech.hackerlife.sim.gui.button.Button;
+import tech.hackerlife.sim.display.panels.ControlPanel;
+import tech.hackerlife.sim.display.panels.PhysicsPanel;
 import tech.hackerlife.sim.maths.Vector2D;
-import tech.hackerlife.sim.physics.Block;
 
 public class Main extends JPanel {
 	
 	// Frame variables
 	final static String NAME = "Physics Simulation";
+	final static int WIDTH = 1280, HEIGHT = 720;
 	private static final long serialVersionUID = 1L;
 	public final static float SCALE = 10; // Pixels per meter
 	
@@ -27,25 +27,12 @@ public class Main extends JPanel {
 	public static final float realTimeUPS = 50.0f;
 	static double ups = 50.0;
 	
-	// Constants
-	final float g = 9.8f;
-	
-	// GUI Objects
-	GUIManager b = new GUIManager();
-	Mouse  m = new Mouse();
-	Button button = new Button("button", 100, 100);
-	
-	// Physics objects
-	float mass = 10;//kg
-	Block m1 = new Block(10.0f, new Vector2D(4,30), new Vector2D(7, -20), 2, 2);
-	
-	public Main() {
-		m1.addForce(new Vector2D(0,g*mass));
-		b.add(button);
-	}
+	// Panels
+	PhysicsPanel physics = new PhysicsPanel(new Vector2D(0,0), 960, 720);
+	ControlPanel control = new ControlPanel(new Vector2D(960,0), 320, 720);
 	
 	public static void main(String[] args) {
-		Window frame = new Window(NAME);	
+		Window frame = new Window(NAME, WIDTH, HEIGHT);	
 		frame.add(new Main());
 	}
 	
@@ -53,9 +40,8 @@ public class Main extends JPanel {
 		super.paintComponent(g);
 		this.setBackground(Color.LIGHT_GRAY);
 		
-		m1.draw(g, SCALE);
-		
-		b.updateElements(g, this, m);
+		control.draw(g, this, SCALE);
+		physics.draw(g, this, SCALE);
 		
 		// This is the update loop
 		long now = System.nanoTime();
@@ -63,7 +49,7 @@ public class Main extends JPanel {
 		lastTime = now;
 		while (delta >= 1) {
 			
-			m1.update();
+			physics.update();
 
 			updates++;
 			delta--;

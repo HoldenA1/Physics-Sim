@@ -1,9 +1,9 @@
-package tech.hackerlife.sim.gui.checkBox;
+package tech.hackerlife.sim.display.gui.checkBox;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import tech.hackerlife.sim.gui.GUIElement;
+import tech.hackerlife.sim.display.gui.GUIElement;
 
 public class CheckBox extends GUIElement {
 	private boolean checked = false;
@@ -17,12 +17,14 @@ public class CheckBox extends GUIElement {
 		super(label, x, y, size, size);
 	}
 	
-	public CheckBox(String label, int x, int y, Color boxColor, boolean lightText) {
-		super(label, x, y, DEFAULT_ELEMENT_SIZE, DEFAULT_ELEMENT_SIZE, boxColor, lightText);
+	public CheckBox withColor(Color color) {
+		super.withColor(color);
+		return this;
 	}
 	
-	public CheckBox(String label, int x, int y, int size, Color boxColor, boolean lightText) {
-		super(label, x, y, size, size, boxColor, lightText);
+	public CheckBox lightText() {
+		super.lightText();
+		return this;
 	}
 
 	public void update(Graphics g, Point mouse, boolean mousePressed) {

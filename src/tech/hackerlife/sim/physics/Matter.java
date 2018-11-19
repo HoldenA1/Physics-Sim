@@ -9,27 +9,33 @@ import tech.hackerlife.sim.maths.Vector2D;
 
 abstract class Matter {
 	float mass;
+	boolean constantAcceleration = false;
+	Color color = Color.GRAY;
 	Vector2D position;
 	Vector2D velocity;
-	Vector2D acceleration;
+	Vector2D acceleration = new Vector2D(0,0);
 	Vector2D forcesSum = new Vector2D(0,0);
 	ArrayList<Vector2D> forces = new ArrayList<Vector2D>();
 	
-	public Matter(float mass, Vector2D position, Vector2D velocity, Vector2D acceleration) {
-		if (position == null) {
-			position = new Vector2D(0,0);
-		}
+	public Matter(float mass, Vector2D position, Vector2D velocity) {
 		if (velocity == null) {
 			velocity = new Vector2D(0,0);
-		}
-		if (acceleration == null) {
-			acceleration = new Vector2D(0,0);
 		}
 		
 		this.mass = mass;
 		this.position = position;
 		this.velocity = velocity;
+	}
+	
+	public Matter withAcceleration(Vector2D acceleration) {
 		this.acceleration = acceleration;
+		constantAcceleration = true;
+		return this;
+	}
+	
+	public Matter withColor(Color color) {
+		this.color = color;
+		return this;
 	}
 	
 	public void moveTo(Vector2D newPos) {
@@ -76,7 +82,9 @@ abstract class Matter {
 	
 	public void update() {
 		// Update acceleration
-		acceleration = Vector2D.divide(forcesSum, mass);
+		if (!constantAcceleration) {
+			acceleration = Vector2D.divide(forcesSum, mass);
+		}
 		
 		// Update velocity
 		velocity.add(Vector2D.divide(acceleration, Main.realTimeUPS));

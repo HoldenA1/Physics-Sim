@@ -1,7 +1,7 @@
-package tech.hackerlife.sim.gui.button;
+package tech.hackerlife.sim.display.gui.button;
 
 import java.awt.*;
-import tech.hackerlife.sim.gui.GUIElement;
+import tech.hackerlife.sim.display.gui.GUIElement;
 
 public class Button extends GUIElement {
 	
@@ -9,16 +9,18 @@ public class Button extends GUIElement {
 		super(label, x, y, (label.length()+2)*CHAR_SIZE, DEFAULT_ELEMENT_SIZE);
 	}
 	
-	public Button(String label, int x, int y, Color buttonColor, boolean lightText) {
-		super(label, x, y, (label.length()+2)*CHAR_SIZE, DEFAULT_ELEMENT_SIZE, buttonColor, lightText);
-	}
-	
 	public Button(String label, int x, int y, int width, int height) {
 		super(label, x, y, width, height);
 	}
 	
-	public Button(String label, int x, int y, int width, int height, Color buttonColor, boolean lightText) {
-		super(label, x, y, width, height, buttonColor, lightText);
+	public Button withColor(Color color) {
+		super.withColor(color);
+		return this;
+	}
+	
+	public Button lightText() {
+		super.lightText();
+		return this;
 	}
 	
 	/**
