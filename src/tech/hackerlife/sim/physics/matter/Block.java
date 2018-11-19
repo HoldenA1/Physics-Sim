@@ -1,4 +1,4 @@
-package tech.hackerlife.sim.physics;
+package tech.hackerlife.sim.physics.matter;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -32,11 +32,6 @@ public class Block extends Matter {
 
 	@Override
 	public void draw(Graphics g, float scale) {
-		
-//		drawForces(g, scale);
-		drawAcceleration(g, scale);
-		drawVelocity(g, scale);
-		
 		// Translates from world-space to screen-space
 		Vector2D scaledPos = Vector2D.mult(position, scale);
 		int scaledWidth = (int) (width * scale);

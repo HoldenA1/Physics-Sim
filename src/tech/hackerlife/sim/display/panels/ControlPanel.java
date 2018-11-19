@@ -25,7 +25,6 @@ public class ControlPanel extends Panel {
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect((int) origin.X(), (int) origin.Y(), width, height);
 		
-		System.out.println(mouse.mouseButtonPressed());
 		manager.updateElements(g, panel, mouse);
 	}
 

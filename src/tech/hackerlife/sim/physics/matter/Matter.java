@@ -1,4 +1,4 @@
-package tech.hackerlife.sim.physics;
+package tech.hackerlife.sim.physics.matter;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -91,6 +91,11 @@ abstract class Matter {
 		
 		// Update position
 		position.add(Vector2D.divide(velocity, Main.realTimeUPS));
+	}
+	
+	// TODO make collision for platforms
+	public void checkCollision() {
+		
 	}
 	
 	public Vector2D getPosition() {
