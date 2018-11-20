@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import javax.swing.JPanel;
+
 import tech.hackerlife.sim.Main;
 import tech.hackerlife.sim.maths.Vector2D;
 
@@ -12,16 +14,12 @@ abstract class Matter {
 	boolean constantAcceleration = false;
 	Color color = Color.GRAY;
 	Vector2D position;
-	Vector2D velocity;
+	Vector2D velocity = new Vector2D(0,0);
 	Vector2D acceleration = new Vector2D(0,0);
 	Vector2D forcesSum = new Vector2D(0,0);
 	ArrayList<Vector2D> forces = new ArrayList<Vector2D>();
 	
 	public Matter(float mass, Vector2D position, Vector2D velocity) {
-		if (velocity == null) {
-			velocity = new Vector2D(0,0);
-		}
-		
 		this.mass = mass;
 		this.position = position;
 		this.velocity = velocity;
@@ -42,14 +40,9 @@ abstract class Matter {
 		position = newPos;
 	}
 	
-	public void moveTo(float x, float y) {
-		position.setX(x);
-		position.setY(y);
-	}
-	
 	public void addForce(Vector2D force) {
 		forces.add(force);
-		forcesSum.add(force);
+		forcesSum = forcesSum.add(force);
 	}
 	
 	public void drawForces(Graphics g, float scale) {
@@ -80,22 +73,38 @@ abstract class Matter {
 		g.setColor(temp);
 	}
 	
-	public void update() {
+	public void update(JPanel panel) {
 		// Update acceleration
 		if (!constantAcceleration) {
-			acceleration = Vector2D.divide(forcesSum, mass);
+			acceleration = forcesSum.divideScalar(mass);
 		}
 		
 		// Update velocity
-		velocity.add(Vector2D.divide(acceleration, Main.realTimeUPS));
+		velocity = velocity.add(acceleration.divideScalar(Main.realTimeUPS));
 		
 		// Update position
-		position.add(Vector2D.divide(velocity, Main.realTimeUPS));
+		position = position.add(velocity.divideScalar(Main.realTimeUPS));
+		
+		checkEdges(96, panel.getHeight()/10);
 	}
 	
 	// TODO make collision for platforms
 	public void checkCollision() {
 		
+	}
+	
+	/**
+	 * @param width of physics panel
+	 * @param height of physics panel
+	 */
+	public void checkEdges(float width, float height) {
+		Vector2D normalForce = new Vector2D(0, forcesSum.Y()*-1);
+		
+		if (position.Y() > height && acceleration.Y() != 0) {
+			position.setY(height);
+			velocity.setY(0);
+			this.addForce(normalForce);
+		}
 	}
 	
 	public Vector2D getPosition() {

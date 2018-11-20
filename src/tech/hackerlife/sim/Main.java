@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 import tech.hackerlife.sim.display.*;
+import tech.hackerlife.sim.display.gui.Mouse;
 import tech.hackerlife.sim.display.panels.ControlPanel;
 import tech.hackerlife.sim.display.panels.PhysicsPanel;
 import tech.hackerlife.sim.maths.Vector2D;
@@ -31,6 +32,12 @@ public class Main extends JPanel {
 	PhysicsPanel physics = new PhysicsPanel(new Vector2D(0,0), 960, 720);
 	ControlPanel control = new ControlPanel(new Vector2D(960,0), 320, 720);
 	
+	Mouse mouse = new Mouse();
+	
+	public Main() {
+		this.addMouseListener(mouse);
+	}
+	
 	public static void main(String[] args) {
 		Window frame = new Window(NAME, WIDTH, HEIGHT);	
 		frame.add(new Main());
@@ -40,8 +47,8 @@ public class Main extends JPanel {
 		super.paintComponent(g);
 		this.setBackground(Color.LIGHT_GRAY);
 		
-		control.draw(g, this, SCALE);
-		physics.draw(g, this, SCALE);
+		physics.draw(g, this, mouse, SCALE);
+		control.draw(g, this, mouse, SCALE);
 		
 		// This is the update loop
 		long now = System.nanoTime();
@@ -49,7 +56,7 @@ public class Main extends JPanel {
 		lastTime = now;
 		while (delta >= 1) {
 			
-			physics.update();
+			physics.update(this);
 
 			updates++;
 			delta--;

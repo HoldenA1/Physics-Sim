@@ -11,7 +11,6 @@ import tech.hackerlife.sim.maths.Vector2D;
 public class ControlPanel extends Panel {
 	// GUI Objects
 	GUIManager manager = new GUIManager();
-	Mouse mouse = new Mouse();
 	Button button;
 
 	public ControlPanel(Vector2D origin, int width, int height) {
@@ -21,11 +20,15 @@ public class ControlPanel extends Panel {
 		manager.add(button);
 	}
 
-	public void draw(Graphics g, JPanel panel, float scale) {
+	public void draw(Graphics g, JPanel panel, Mouse mouse, float scale) {
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect((int) origin.X(), (int) origin.Y(), width, height);
 		
 		manager.updateElements(g, panel, mouse);
+		
+		if (button.isPressed()) {
+			
+		}
 	}
 
 }

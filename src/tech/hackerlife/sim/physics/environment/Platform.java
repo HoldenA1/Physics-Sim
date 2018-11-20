@@ -35,7 +35,7 @@ public class Platform {
 	
 	public void draw(Graphics g, float scale) {
 		// Translates from world-space to screen-space
-		Vector2D scaledPos = Vector2D.mult(pos, scale);
+		Vector2D scaledPos = pos.mult(scale);
 		int scaledWidth = (int) (width * scale);
 		int scaleHeight = (int) (height * scale);
 		

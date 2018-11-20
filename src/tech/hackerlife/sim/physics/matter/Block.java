@@ -33,7 +33,7 @@ public class Block extends Matter {
 	@Override
 	public void draw(Graphics g, float scale) {
 		// Translates from world-space to screen-space
-		Vector2D scaledPos = Vector2D.mult(position, scale);
+		Vector2D scaledPos = position.mult(scale);
 		int scaledWidth = (int) (width * scale);
 		int scaleHeight = (int) (height * scale);
 	

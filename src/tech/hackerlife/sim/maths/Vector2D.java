@@ -10,39 +10,55 @@ public class Vector2D {
 		this.y = y;
 	}
 	
-	public void add(Vector2D vec) {
-		x += vec.X();
-		y += vec.Y();
+	public Vector2D add(Vector2D vec) {
+		float x = this.x + vec.X();
+		float y = this.y + vec.Y();
+		return new Vector2D(x, y);
 	}
 	
-	public void add(float scalar) {
-		x += scalar;
-		y += scalar;
+	public Vector2D add(float scalar) {
+		float x = this.x + scalar;
+		float y = this.y + scalar;
+		return new Vector2D(x, y);
 	}
 	
-	private void divide(float scalar) {
-		x /= scalar;
-		y /= scalar;
+	public Vector2D divideVec(Vector2D vec) {
+		float x = this.x / vec.X();
+		float y = this.y / vec.Y();
+		return new Vector2D(x, y);
+	}
+	
+	public Vector2D divideScalar(float scalar) {
+		float x = this.x / scalar;
+		float y = this.y / scalar;
+		return new Vector2D(x, y);
+	}
+	
+	public Vector2D mult(float scalar) {
+		float x = this.x * scalar;
+		float y = this.y * scalar;
+		return new Vector2D(x, y);
 	}
 	
 	public float mag() {
 		return (float) Math.sqrt(x*x + y*y);
 	}
 	
-	public void normalize() {
+	public Vector2D normalize() {
 		float magnitude = this.mag();
 		if (magnitude > 0) {
-			this.divide(magnitude);
+			return this.divideScalar(magnitude);
 		}
+		return this;
 	}
 	
 	/**
 	 * @param scale Put 1 for normal use
 	 */
 	public void drawVector(Graphics g, Vector2D pos, float scale) {
-		Vector2D scaledInitial = Vector2D.mult(pos, scale);
-		Vector2D scaledFinal = Vector2D.mult(this, scale);
-		scaledFinal.add(scaledInitial);
+		Vector2D scaledInitial = pos.mult(scale);
+		Vector2D scaledFinal = this.mult(scale);
+		scaledFinal = scaledFinal.add(scaledInitial);
 	    int dx = (int) (scaledFinal.X() - scaledInitial.X());
 	    int dy = (int) (scaledFinal.Y() - scaledInitial.Y());
 	    double D = Math.sqrt(dx*dx + dy*dy);
@@ -78,17 +94,5 @@ public class Vector2D {
 	
 	public void setY(float y) {
 		this.y = y;
-	}
-	
-	public static Vector2D divide(Vector2D vec1, Vector2D vec2) {
-		return new Vector2D(vec1.X()/vec2.X(), vec1.Y()/vec2.Y());
-	}
-	
-	public static Vector2D divide(Vector2D vec, float scalar) {
-		return new Vector2D(vec.X()/scalar, vec.Y()/scalar);
-	}
-	
-	public static Vector2D mult(Vector2D vec, float scalar) {
-		return new Vector2D(vec.X()*scalar, vec.Y()*scalar);
 	}
 }
