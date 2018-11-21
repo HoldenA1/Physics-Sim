@@ -7,8 +7,8 @@ import tech.hackerlife.sim.display.gui.GUIManager;
 import tech.hackerlife.sim.display.gui.Mouse;
 import tech.hackerlife.sim.display.gui.button.Button;
 import tech.hackerlife.sim.maths.Vector2D;
-import tech.hackerlife.sim.physics.environment.Platform;
 import tech.hackerlife.sim.physics.matter.Block;
+import tech.hackerlife.sim.physics.matter.Platform;
 
 public class SimPanel extends Panel {
 	// GUI Objects
@@ -22,7 +22,7 @@ public class SimPanel extends Panel {
 	float mass = 1;//kg
 	float gravity = mass * g;
 	Block m1 = new Block(mass, new Vector2D(4,0), new Vector2D(0, 0), 1f, 1f).withColor(Color.BLUE);
-	Platform pl = new Platform(new Vector2D(10, 20), 10, 1);
+	Platform p = new Platform(new Vector2D(10,10), 20, 0.5f);
 
 	public SimPanel (int width, int height) {
 		super(width, height);
@@ -42,7 +42,8 @@ public class SimPanel extends Panel {
 		manager.updateElements(g, panel, mouse);
 		
 		// Physics things
-		pl.draw(g, scale);
+		p.draw(g, scale);
+		
 		m1.drawForces(g, scale);
 		m1.draw(g, scale);
 	}

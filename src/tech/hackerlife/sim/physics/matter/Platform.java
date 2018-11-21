@@ -1,41 +1,39 @@
-package tech.hackerlife.sim.physics.environment;
+package tech.hackerlife.sim.physics.matter;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import tech.hackerlife.sim.maths.Vector2D;
 
-public class Platform {
-	Vector2D pos;
+public class Platform extends Thing {
 	float theta = 0;
-	int width, height;
+	float width, height;
 	Color color = Color.BLACK;
 	
 	/**
 	 * All parameters are in meters
 	 */
-	public Platform(Vector2D pos, int width, int height) {
-		this.pos = pos;
+	public Platform(Vector2D pos, float width, float height) {
+		super(pos);
 		this.width = width;
 		this.height = height;
 	}
 	
 	public Platform withColor(Color color) {
-		this.color = color;
+		super.withColor(color);
 		return this;
 	}
 	
-	/**
-	 * Do not use yet!!
-	 * @param theta is measured in degrees
-	 */
-	public Platform withRotation(float theta) {
-		this.theta = theta;
-		return this;
-	}
+//	/**
+//	 * @param theta is measured in degrees
+//	 */
+//	public Platform withRotation(float theta) {
+//		this.theta = theta;
+//		return this;
+//	}
 	
 	public void draw(Graphics g, float scale) {
 		// Translates from world-space to screen-space
-		Vector2D scaledPos = pos.mult(scale);
+		Vector2D scaledPos = position.mult(scale);
 		int scaledWidth = (int) (width * scale);
 		int scaleHeight = (int) (height * scale);
 		

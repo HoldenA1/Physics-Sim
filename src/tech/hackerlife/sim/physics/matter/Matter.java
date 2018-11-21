@@ -7,30 +7,28 @@ import tech.hackerlife.sim.Main;
 import tech.hackerlife.sim.display.panels.Panel;
 import tech.hackerlife.sim.maths.Vector2D;
 
-abstract class Matter {
-	float mass;
-	boolean constantAcceleration = false;
-	Color color = Color.GRAY;
-	Vector2D position;
-	Vector2D velocity = new Vector2D(0,0);
-	Vector2D acceleration = new Vector2D(0,0);
-	Vector2D forcesSum = new Vector2D(0,0);
-	ArrayList<Vector2D> forces = new ArrayList<Vector2D>();
+abstract class Matter extends Thing {
+	private float mass;
+	private boolean constantAcceleration = false;
+	private Vector2D velocity = new Vector2D(0,0);
+	private Vector2D acceleration = new Vector2D(0,0);
+	private Vector2D forcesSum = new Vector2D(0,0);
+	private ArrayList<Vector2D> forces = new ArrayList<Vector2D>();
 	
 	public Matter(float mass, Vector2D position, Vector2D velocity) {
+		super(position);
 		this.mass = mass;
-		this.position = position;
 		this.velocity = velocity;
+	}
+	
+	public Matter withColor(Color color) {
+		super.withColor(color);
+		return this;
 	}
 	
 	public Matter withAcceleration(Vector2D acceleration) {
 		this.acceleration = acceleration;
 		constantAcceleration = true;
-		return this;
-	}
-	
-	public Matter withColor(Color color) {
-		this.color = color;
 		return this;
 	}
 	
@@ -101,11 +99,12 @@ abstract class Matter {
 	}
 	
 	// TODO make collision for platforms
-	public void checkCollision() {
+	public void checkCollision(ArrayList<Thing> things) {
 		
 	}
 	
 	/**
+	 * TODO remove this
 	 * @param width of physics panel
 	 * @param height of physics panel
 	 */
@@ -130,7 +129,5 @@ abstract class Matter {
 	public Vector2D getAcceleration() {
 		return acceleration;
 	}
-	
-	public abstract void draw(Graphics g, float scale);
 	
 }
