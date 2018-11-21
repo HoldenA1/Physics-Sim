@@ -5,9 +5,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 import tech.hackerlife.sim.display.*;
 import tech.hackerlife.sim.display.gui.Mouse;
-import tech.hackerlife.sim.display.panels.ControlPanel;
-import tech.hackerlife.sim.display.panels.PhysicsPanel;
-import tech.hackerlife.sim.maths.Vector2D;
+import tech.hackerlife.sim.display.panels.SimPanel;
 
 public class Main extends JPanel {
 	
@@ -15,7 +13,7 @@ public class Main extends JPanel {
 	final static String NAME = "Physics Simulation";
 	final static int WIDTH = 1280, HEIGHT = 720;
 	private static final long serialVersionUID = 1L;
-	public final static float SCALE = 10; // Pixels per meter
+	public final static float SCALE = 20; // Pixels per meter
 	
 	// Update loop variables
 	long lastTime = System.nanoTime();
@@ -29,12 +27,13 @@ public class Main extends JPanel {
 	static double ups = 50.0;
 	
 	// Panels
-	PhysicsPanel physics = new PhysicsPanel(new Vector2D(0,0), 960, 720);
-	ControlPanel control = new ControlPanel(new Vector2D(960,0), 320, 720);
+	SimPanel panel = new SimPanel(WIDTH, HEIGHT-40);
 	
-	Mouse mouse = new Mouse();
+	Mouse mouse;
 	
 	public Main() {
+		// Adds mouse listener to the JPanel
+		mouse = new Mouse();
 		this.addMouseListener(mouse);
 	}
 	
@@ -47,16 +46,22 @@ public class Main extends JPanel {
 		super.paintComponent(g);
 		this.setBackground(Color.LIGHT_GRAY);
 		
-		physics.draw(g, this, mouse, SCALE);
-		control.draw(g, this, mouse, SCALE);
+		panel.draw(g, this, mouse, SCALE);
 		
+		update();
+		
+		repaint();
+	}
+	
+	private void update() {
 		// This is the update loop
 		long now = System.nanoTime();
 		delta += (now - lastTime) / ns;
 		lastTime = now;
 		while (delta >= 1) {
 			
-			physics.update(this);
+			// Call your updates here
+			panel.update(SCALE);
 
 			updates++;
 			delta--;
@@ -68,8 +73,6 @@ public class Main extends JPanel {
 			System.out.println("ups: " + updates);
 			updates = 0;
 		}
-		
-		repaint();
 	}
 
 }

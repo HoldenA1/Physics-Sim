@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import tech.hackerlife.sim.maths.Vector2D;
 
 public class Block extends Matter {
-	int width, height;
+	float width, height;
 	
 	/**
 	 * @param mass In kilograms
@@ -14,7 +14,7 @@ public class Block extends Matter {
 	 * @param width In meters
 	 * @param height In meters
 	 */
-	public Block(float mass, Vector2D position, Vector2D velocity, int width, int height) {
+	public Block(float mass, Vector2D position, Vector2D velocity, float width, float height) {
 		super(mass, position, velocity);
 		this.width = width;
 		this.height = height;
@@ -30,7 +30,6 @@ public class Block extends Matter {
 		return this;
 	}
 
-	@Override
 	public void draw(Graphics g, float scale) {
 		// Translates from world-space to screen-space
 		Vector2D scaledPos = position.mult(scale);

@@ -52,6 +52,10 @@ public class Vector2D {
 		return this;
 	}
 	
+	public boolean equals(Vector2D vec) {
+		return x == vec.X() && y == vec.Y();
+	}
+	
 	/**
 	 * @param scale Put 1 for normal use
 	 */

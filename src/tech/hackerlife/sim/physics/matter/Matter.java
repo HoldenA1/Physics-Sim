@@ -3,10 +3,8 @@ package tech.hackerlife.sim.physics.matter;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-
-import javax.swing.JPanel;
-
 import tech.hackerlife.sim.Main;
+import tech.hackerlife.sim.display.panels.Panel;
 import tech.hackerlife.sim.maths.Vector2D;
 
 abstract class Matter {
@@ -45,6 +43,20 @@ abstract class Matter {
 		forcesSum = forcesSum.add(force);
 	}
 	
+	/**
+	 * @return true if force was removed, false if it wasn't present
+	 */
+	public boolean removeForce(Vector2D force) {
+		for (Vector2D f: forces) {
+			if (force.equals(f)) {
+				forces.remove(f);
+				forcesSum = forcesSum.add(force.mult(-1));
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void drawForces(Graphics g, float scale) {
 		Color temp = g.getColor();
 		g.setColor(Color.YELLOW);
@@ -73,7 +85,7 @@ abstract class Matter {
 		g.setColor(temp);
 	}
 	
-	public void update(JPanel panel) {
+	public void update(Panel panel, float scale) {
 		// Update acceleration
 		if (!constantAcceleration) {
 			acceleration = forcesSum.divideScalar(mass);
@@ -85,7 +97,7 @@ abstract class Matter {
 		// Update position
 		position = position.add(velocity.divideScalar(Main.realTimeUPS));
 		
-		checkEdges(96, panel.getHeight()/10);
+		checkEdges(96, panel.getHeight()/scale);
 	}
 	
 	// TODO make collision for platforms
@@ -98,7 +110,7 @@ abstract class Matter {
 	 * @param height of physics panel
 	 */
 	public void checkEdges(float width, float height) {
-		Vector2D normalForce = new Vector2D(0, forcesSum.Y()*-1);
+		Vector2D normalForce = forcesSum.mult(-1);
 		
 		if (position.Y() > height && acceleration.Y() != 0) {
 			position.setY(height);
