@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import tech.hackerlife.sim.display.gui.GUIElement;
+import tech.hackerlife.sim.display.gui.Mouse;
 
 public class CheckBox extends GUIElement {
 	private boolean checked = false;
-	private boolean pressedLastTime = false;
 
 	public CheckBox(String label, int x, int y) {
 		super(label, x, y, DEFAULT_ELEMENT_SIZE, DEFAULT_ELEMENT_SIZE);
@@ -27,14 +27,16 @@ public class CheckBox extends GUIElement {
 		return this;
 	}
 
-	public void update(Graphics g, Point mouse, boolean mousePressed) {
+	public void update(Graphics g, Point mousePos, Mouse mouse) {
 		if (isVisible) {
-			hover = this.contains(mouse);
-			isPressed = hover && mousePressed;
-			if (isPressed && !pressedLastTime) {
+			hover = this.contains(mousePos);
+			isHeld = hover && mouse.mouseButtonPressed();
+			isPressed = lastTimeHeld && !mouse.mouseButtonPressed();
+			lastTimeHeld = isHeld;
+			
+			if (isPressed) {
 				checked = !checked;
 			}
-			pressedLastTime = isPressed;
 			
 			drawColor = chooseColor(isPressed, hover);
 			

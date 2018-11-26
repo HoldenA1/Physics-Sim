@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import tech.hackerlife.sim.Main;
-import tech.hackerlife.sim.display.panels.Panel;
 import tech.hackerlife.sim.maths.Vector2D;
+import tech.hackerlife.sim.physics.Thing;
 
-abstract class Matter extends Thing {
+public abstract class Matter extends Thing {
 	private float mass;
 	private boolean constantAcceleration = false;
 	private Vector2D velocity = new Vector2D(0,0);
@@ -15,9 +15,12 @@ abstract class Matter extends Thing {
 	private Vector2D forcesSum = new Vector2D(0,0);
 	private ArrayList<Vector2D> forces = new ArrayList<Vector2D>();
 	
-	public Matter(float mass, Vector2D position, Vector2D velocity) {
-		super(position);
+	public Matter(float mass, Vector2D position, Vector2D velocity, float width, float height) {
+		super(position, width, height);
 		this.mass = mass;
+		if (velocity == null) {
+			velocity = new Vector2D(0,0);
+		}
 		this.velocity = velocity;
 	}
 	
@@ -32,8 +35,11 @@ abstract class Matter extends Thing {
 		return this;
 	}
 	
-	public void moveTo(Vector2D newPos) {
-		position = newPos;
+	public void setVelocity(Vector2D velocity) {
+		if (velocity == null) {
+			velocity = new Vector2D(0,0);
+		}
+		this.velocity = velocity;
 	}
 	
 	public void addForce(Vector2D force) {
@@ -83,7 +89,7 @@ abstract class Matter extends Thing {
 		g.setColor(temp);
 	}
 	
-	public void update(Panel panel, float scale) {
+	public void update(float scale, ArrayList<Thing> things) {
 		// Update acceleration
 		if (!constantAcceleration) {
 			acceleration = forcesSum.divideScalar(mass);
@@ -95,32 +101,16 @@ abstract class Matter extends Thing {
 		// Update position
 		position = position.add(velocity.divideScalar(Main.realTimeUPS));
 		
-		checkEdges(96, panel.getHeight()/scale);
-	}
-	
-	// TODO make collision for platforms
-	public void checkCollision(ArrayList<Thing> things) {
-		
-	}
-	
-	/**
-	 * TODO remove this
-	 * @param width of physics panel
-	 * @param height of physics panel
-	 */
-	public void checkEdges(float width, float height) {
-		Vector2D normalForce = forcesSum.mult(-1);
-		
-		if (position.Y() > height && acceleration.Y() != 0) {
-			position.setY(height);
-			velocity.setY(0);
-			this.addForce(normalForce);
+		for (Thing t: things) {
+			if (checkCollision(t)) {
+				moveTo(t.getPointOnEdge(position.add(t.getPosition().mult(-1)).dir()));
+				setVelocity(null);
+			}
 		}
 	}
 	
-	public Vector2D getPosition() {
-		return position;
-	}
+	// TODO make collision for platforms
+	public abstract boolean checkCollision(Thing thing);
 	
 	public Vector2D getVelocity() {
 		return velocity;
@@ -128,6 +118,10 @@ abstract class Matter extends Thing {
 	
 	public Vector2D getAcceleration() {
 		return acceleration;
+	}
+	
+	public float getMass() {
+		return mass;
 	}
 	
 }

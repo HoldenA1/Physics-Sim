@@ -2,6 +2,7 @@ package tech.hackerlife.sim.display.gui.button;
 
 import java.awt.*;
 import tech.hackerlife.sim.display.gui.GUIElement;
+import tech.hackerlife.sim.display.gui.Mouse;
 
 public class Button extends GUIElement {
 	
@@ -28,12 +29,14 @@ public class Button extends GUIElement {
 	 * @param g the graphics component for rendering
 	 * @param mouse the current mouse position
 	 */
-	public void update(Graphics g, Point mouse, boolean mousePressed) {
+	public void update(Graphics g, Point mousePos, Mouse mouse) {
 		if (isVisible) {
-			hover = this.contains(mouse);
-			isPressed = hover && mousePressed;
+			hover = this.contains(mousePos);
+			isHeld = hover && mouse.mouseButtonPressed();
+			isPressed = lastTimeHeld && !mouse.mouseButtonPressed();
+			lastTimeHeld = isHeld;
 			
-			drawColor = chooseColor(isPressed, hover);
+			drawColor = chooseColor(isHeld, hover);
 			
 			g.setColor(drawColor);
 			g.fillRect(x, y, width, height);

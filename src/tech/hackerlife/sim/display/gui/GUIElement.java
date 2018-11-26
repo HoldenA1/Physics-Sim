@@ -8,7 +8,7 @@ import java.awt.Point;
 public abstract class GUIElement {
 	protected String label;
 	protected int x, y, width, height;
-	protected boolean hover = false, isPressed = false, isVisible = true;
+	protected boolean hover = false, isHeld = false, isPressed = false, lastTimeHeld = false, isVisible = true;
 	protected Font normalFont = new Font(Font.MONOSPACED, Font.PLAIN, 25);
 	protected Color textColor = Color.BLACK;
 	protected Color mainColor, drawColor;
@@ -35,13 +35,13 @@ public abstract class GUIElement {
 		return this;
 	}
 	
-	public abstract void update(Graphics g, Point mouse, boolean mousePressed);
+	public abstract void update(Graphics g, Point mousePos, Mouse mouse);
 	
 	/**
 	 * gives the desired highlight color depending on what the mouse is doing
 	 */
-	protected Color chooseColor(boolean isPressed, boolean hover) {
-		if (isPressed) {
+	protected Color chooseColor(boolean isHeld, boolean hover) {
+		if (isHeld) {
 			return mainColor.darker().darker();
 		} else if (hover) {
 			return mainColor.darker();
@@ -74,6 +74,10 @@ public abstract class GUIElement {
 	 */
 	public void setVisibility(boolean isVisible) {
 		this.isVisible = isVisible;
+	}
+	
+	public boolean isVisible() {
+		return isVisible;
 	}
 
 }

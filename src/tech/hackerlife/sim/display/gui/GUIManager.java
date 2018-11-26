@@ -17,7 +17,7 @@ private ArrayList<GUIElement> elements;
 	
 	public void updateElements(Graphics g, JPanel panel, Mouse mouse) {	
 		for (GUIElement e: elements)
-			e.update(g, panel.getMousePosition(), mouse.mouseButtonPressed());
+			e.update(g, panel.getMousePosition(), mouse);
 	}
 
 }
