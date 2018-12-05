@@ -42,54 +42,39 @@ public abstract class Matter extends Thing {
 		this.velocity = velocity;
 	}
 	
-	public void addForce(Vector2D force) {
+	public void addConstantForce(Vector2D force) {
 		forces.add(force);
-		forcesSum = forcesSum.add(force);
 	}
 	
 	/**
 	 * @return true if force was removed, false if it wasn't present
 	 */
-	public boolean removeForce(Vector2D force) {
+	public boolean removeConstantForce(Vector2D force) {
 		for (Vector2D f: forces) {
 			if (force.equals(f)) {
 				forces.remove(f);
-				forcesSum = forcesSum.add(force.mult(-1));
 				return true;
 			}
 		}
 		return false;
 	}
 	
+	public void addForce(Vector2D force) {
+		forcesSum = forcesSum.add(force);
+	}
+	
 	public void drawForces(Graphics g, float scale) {
-		Color temp = g.getColor();
-		g.setColor(Color.YELLOW);
-		
 		for (Vector2D force: forces) {
-			force.drawVector(g, position, scale);
+			force.drawVector(g, position, scale, Color.YELLOW);
 		}
-		g.setColor(temp);
-	}
-	
-	public void drawAcceleration(Graphics g, float scale) {
-		Color temp = g.getColor();
-		g.setColor(Color.RED);
-		
-		acceleration.drawVector(g, position, scale);
-		
-		g.setColor(temp);
-	}
-	
-	public void drawVelocity(Graphics g, float scale) {
-		Color temp = g.getColor();
-		g.setColor(Color.GREEN);
-		
-		velocity.drawVector(g, position, scale);
-		
-		g.setColor(temp);
 	}
 	
 	public void update(float scale, ArrayList<Thing> things) {
+		// Gets the net force on the object
+		for (Vector2D f: forces) {
+			forcesSum = forcesSum.add(f);
+		}
+		
 		// Update acceleration
 		if (!constantAcceleration) {
 			acceleration = forcesSum.divideScalar(mass);
@@ -107,6 +92,9 @@ public abstract class Matter extends Thing {
 				setVelocity(null);
 			}
 		}
+		
+		// Resets the net force to zero (it is summed every time)
+		forcesSum = new Vector2D(0,0);
 	}
 	
 	// TODO make collision for platforms

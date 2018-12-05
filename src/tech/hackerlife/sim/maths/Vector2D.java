@@ -1,5 +1,6 @@
 package tech.hackerlife.sim.maths;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Vector2D {
@@ -82,6 +83,7 @@ public class Vector2D {
 	 * @return angle in radians
 	 */
 	public float dir() {
+		//TODO make this better
 		float theta = 0;
 		if (x > 0) {
 			if (y < 0) {
@@ -112,7 +114,9 @@ public class Vector2D {
 	/**
 	 * @param scale Put 1 for normal use
 	 */
-	public void drawVector(Graphics g, Vector2D pos, float scale) {
+	public void drawVector(Graphics g, Vector2D pos, float scale, Color vectorColor) {
+		g.setColor(vectorColor);
+		
 		Vector2D scaledInitial = pos.mult(scale);
 		Vector2D scaledFinal = this.mult(scale);
 		scaledFinal = scaledFinal.add(scaledInitial);

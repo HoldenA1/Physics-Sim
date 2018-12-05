@@ -14,7 +14,7 @@ import tech.hackerlife.sim.physics.matter.Block;
 public class SimPanel extends Panel {
 	// GUI Objects
 	GUIManager gui = new GUIManager();
-	Button b1, b2;
+	Button b1;
 	
 	// Constants
 	final float g = 9.8f;//N/kg
@@ -32,10 +32,7 @@ public class SimPanel extends Panel {
 		
 		// GUI stuff
 		b1 = new Button("Apply Normal Force", 900, 100).withColor(Color.GRAY);
-		b2 = new Button("Remove Normal Force", 900, 100).withColor(Color.RED);
 		gui.add(b1);
-		gui.add(b2);
-		b2.setVisibility(false);
 		
 		// Physics Stuff
 		m1 = new Block(mass, new Vector2D(23,0), new Vector2D(0, 0), 1f, 1f);
@@ -56,9 +53,6 @@ public class SimPanel extends Panel {
 		
 		// Physics things
 		obj.draw(g, scale);
-		
-		g.setColor(Color.BLUE);
-		g.drawLine((int)(scale*(m1.getPosition().X()-1.5)), (int)(scale*(m1.getPosition().Y())), (int)(scale*(m1.getPosition().X()+1.5)), (int)(scale*(m1.getPosition().Y())));
 		
 	}
 	
