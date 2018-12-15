@@ -9,6 +9,7 @@ import tech.hackerlife.sim.display.gui.button.Button;
 import tech.hackerlife.sim.maths.Vector2D;
 import tech.hackerlife.sim.physics.ObjectManager;
 import tech.hackerlife.sim.physics.environment.Platform;
+import tech.hackerlife.sim.physics.matter.Ball;
 import tech.hackerlife.sim.physics.matter.Block;
 
 public class SimPanel extends Panel {
@@ -25,6 +26,7 @@ public class SimPanel extends Panel {
 	float mass = 1;//kg
 	float gravity = mass * g;
 	Block m1;
+	Ball ball;
 	Platform p;
 
 	public SimPanel (int width, int height) {
@@ -36,8 +38,10 @@ public class SimPanel extends Panel {
 		
 		// Physics Stuff
 		m1 = new Block(mass, new Vector2D(23,0), new Vector2D(0, 0), 1f, 1f);
+		ball = new Ball(mass, new Vector2D(3f, 0), null, 1).withColor(Color.magenta);
 		p = new Platform(new Vector2D(14,10), 20, 3f);
 		obj.add(m1);
+		obj.add(ball);
 		obj.add(p);
 
 		// Add gravity

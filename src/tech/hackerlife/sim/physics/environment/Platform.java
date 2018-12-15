@@ -10,8 +10,8 @@ public class Platform extends Thing {
 	/**
 	 * All parameters are in meters
 	 */
-	public Platform(Vector2D pos, float width, float height) {
-		super(pos, width, height);
+	public Platform(Vector2D position, float width, float height) {
+		super(position, width, height);
 	}
 	
 	public Platform withColor(Color color) {

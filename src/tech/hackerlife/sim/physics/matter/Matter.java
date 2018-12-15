@@ -13,10 +13,19 @@ public abstract class Matter extends Thing {
 	private Vector2D velocity = new Vector2D(0,0);
 	private Vector2D acceleration = new Vector2D(0,0);
 	private Vector2D forcesSum = new Vector2D(0,0);
-	private ArrayList<Vector2D> forces = new ArrayList<Vector2D>();
+	private ArrayList<Vector2D> constantForces = new ArrayList<Vector2D>();
 	
 	public Matter(float mass, Vector2D position, Vector2D velocity, float width, float height) {
 		super(position, width, height);
+		this.mass = mass;
+		if (velocity == null) {
+			velocity = new Vector2D(0,0);
+		}
+		this.velocity = velocity;
+	}
+	
+	public Matter(float mass, Vector2D position, Vector2D velocity, float radius) {
+		super(position, radius);
 		this.mass = mass;
 		if (velocity == null) {
 			velocity = new Vector2D(0,0);
@@ -43,16 +52,16 @@ public abstract class Matter extends Thing {
 	}
 	
 	public void addConstantForce(Vector2D force) {
-		forces.add(force);
+		constantForces.add(force);
 	}
 	
 	/**
 	 * @return true if force was removed, false if it wasn't present
 	 */
 	public boolean removeConstantForce(Vector2D force) {
-		for (Vector2D f: forces) {
+		for (Vector2D f: constantForces) {
 			if (force.equals(f)) {
-				forces.remove(f);
+				constantForces.remove(f);
 				return true;
 			}
 		}
@@ -64,14 +73,14 @@ public abstract class Matter extends Thing {
 	}
 	
 	public void drawForces(Graphics g, float scale) {
-		for (Vector2D force: forces) {
+		for (Vector2D force: constantForces) {
 			force.drawVector(g, position, scale, Color.YELLOW);
 		}
 	}
 	
 	public void update(float scale, ArrayList<Thing> things) {
 		// Gets the net force on the object
-		for (Vector2D f: forces) {
+		for (Vector2D f: constantForces) {
 			forcesSum = forcesSum.add(f);
 		}
 		
@@ -83,22 +92,24 @@ public abstract class Matter extends Thing {
 		// Update velocity
 		velocity = velocity.add(acceleration.divideScalar(Main.realTimeUPS));
 		
+		checkCollisions(things);
+		
 		// Update position
 		position = position.add(velocity.divideScalar(Main.realTimeUPS));
-		
-		for (Thing t: things) {
-			if (checkCollision(t)) {
-				moveTo(t.getPointOnEdge(position.add(t.getPosition().mult(-1)).dir()));
-				setVelocity(null);
-			}
-		}
 		
 		// Resets the net force to zero (it is summed every time)
 		forcesSum = new Vector2D(0,0);
 	}
 	
-	// TODO make collision for platforms
-	public abstract boolean checkCollision(Thing thing);
+	public void checkCollisions(ArrayList<Thing> things) {
+		for (Thing t: things) {
+			if (!this.equals(t)) {
+				if (getArea().intersects(t.getArea().getBounds2D())) {
+					setVelocity(null);
+				}
+			}
+		}
+	}
 	
 	public Vector2D getVelocity() {
 		return velocity;

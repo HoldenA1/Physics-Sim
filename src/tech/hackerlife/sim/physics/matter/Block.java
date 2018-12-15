@@ -3,7 +3,6 @@ package tech.hackerlife.sim.physics.matter;
 import java.awt.Color;
 import java.awt.Graphics;
 import tech.hackerlife.sim.maths.Vector2D;
-import tech.hackerlife.sim.physics.Thing;
 
 public class Block extends Matter {
 	/**
@@ -40,19 +39,6 @@ public class Block extends Matter {
 		// Draws object
 		g.setColor(color);
 		g.fillRect(x, y, scaledWidth, scaleHeight);
-	}
-
-	public boolean checkCollision(Thing thing) {
-		Vector2D betweenObjects = thing.getPosition().add(position.mult(-1));
-		float dir = betweenObjects.dir();
-		if (betweenObjects.equals(new Vector2D(0,0))) {
-			return false;
-		}
-		if (betweenObjects.mag() < this.getDistFromEdge(dir) + thing.getDistFromEdge(dir)) {
-			return true;
-		}
-		
-		return false;
 	}
 	
 }
