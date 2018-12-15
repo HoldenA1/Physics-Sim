@@ -14,6 +14,7 @@ public abstract class Matter extends Thing {
 	private Vector2D acceleration = new Vector2D(0,0);
 	private Vector2D forcesSum = new Vector2D(0,0);
 	private ArrayList<Vector2D> constantForces = new ArrayList<Vector2D>();
+	private float elasticity = 0;
 	
 	public Matter(float mass, Vector2D position, Vector2D velocity, float width, float height) {
 		super(position, width, height);
@@ -68,6 +69,13 @@ public abstract class Matter extends Thing {
 		return false;
 	}
 	
+	/**
+	 * @param elasticity goes from 0 to 1. 1 is completely elastic and 0 is completely inelastic
+	 */
+	public void setElasticity(float elasticity) {
+		this.elasticity = elasticity;
+	}
+	
 	public void addForce(Vector2D force) {
 		forcesSum = forcesSum.add(force);
 	}
@@ -92,6 +100,7 @@ public abstract class Matter extends Thing {
 		// Update velocity
 		velocity = velocity.add(acceleration.divideScalar(Main.realTimeUPS));
 		
+		// Check if the object has collided with any other things and responds accordingly
 		checkCollisions(things);
 		
 		// Update position
