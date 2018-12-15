@@ -8,33 +8,18 @@ public class Vector2D {
 	float x, y;
 	final float VECTOR_ARROW_SIZE = 10;
 	
-	// TODO make constructors unique to remove double conversion
 	public Vector2D(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
 	
 	/**
-	 * @param angle in radians
-	 * @param magnitude
+	 * @param angle in radians measured from the x-axis
+	 * @param mag is magnitude of vector
 	 */
-	public Vector2D(double angle, float magnitude) {
-		int quad = Trig.getQuadrant((float)angle);
-		float refAngle = Trig.getRefAngle((float)angle);
-		
-		if (quad == 1) {
-			x = (float) (magnitude*Math.cos(refAngle));
-			y = (float) (-magnitude*Math.sin(refAngle));
-		} else if (quad == 2) {
-			x = (float) (-magnitude*Math.cos(refAngle));
-			y = (float) (-magnitude*Math.sin(refAngle));
-		} else if (quad == 3) {
-			x = (float) (-magnitude*Math.cos(refAngle));
-			y = (float) (magnitude*Math.sin(refAngle));
-		} else if (quad == 4) {
-			x = (float) (magnitude*Math.cos(refAngle));
-			y = (float) (magnitude*Math.sin(refAngle));
-		}
+	public Vector2D(double theta, float mag) {
+		this.x = (float) (mag * Math.cos(theta));
+		this.y = (float) (mag * Math.sin(theta));
 	}
 	
 	public Vector2D add(Vector2D vec) {
@@ -82,29 +67,8 @@ public class Vector2D {
 	/**
 	 * @return angle in radians
 	 */
-	public float dir() {
-		//TODO make this better
-		float theta = 0;
-		if (x > 0) {
-			if (y < 0) {
-				theta = (float) (Math.atan(-y/x));
-			} else {
-				theta = (float) (2*Math.PI - Math.atan(y/x));
-			}
-		} else if (x == 0) {
-			if (y < 0) {
-				theta = (float) (Math.PI / 2);
-			} else {
-				theta = (float) (3*Math.PI / 2);
-			}
-		} else {
-			if (y < 0) {
-				theta = (float) (Math.PI - Math.atan(-y/x));
-			} else {
-				theta = (float) (Math.PI + Math.atan(y/x));
-			}
-		}
-		return theta;
+	public double dir() {
+		return Math.atan2(this.y, this.x);
 	}
 	
 	public boolean equals(Vector2D vec) {
