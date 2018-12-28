@@ -26,7 +26,7 @@ public class SimPanel extends Panel {
 	float mass = 1;//kg
 	float gravity = mass * g;
 	Block m1;
-	Ball ball;
+	Ball m2;
 	Platform p;
 
 	public SimPanel (int width, int height) {
@@ -37,12 +37,14 @@ public class SimPanel extends Panel {
 		gui.add(b1);
 		
 		// Physics Stuff
-		m1 = new Block(mass, new Vector2D(23,0), new Vector2D(0, 0), 1f, 1f);
-		ball = new Ball(mass, new Vector2D(3f, 0), null, 1).withColor(Color.magenta);
-		p = new Platform(new Vector2D(14,10), 20, 3f);
+		m1 = new Block(mass, new Vector2D(12,0), new Vector2D(2, 0), 1f, 1f).withColor(Color.BLUE);
+		m2 = new Ball(mass, new Vector2D(19,0), new Vector2D(-3, 0), 1f);
+		p = new Platform(new Vector2D(14,10), 20, 2f);
 		obj.add(m1);
-		obj.add(ball);
+		obj.add(m2);
 		obj.add(p);
+		
+		m2.setElastic(false);
 
 		// Add gravity
 		obj.addGravity();
@@ -57,7 +59,8 @@ public class SimPanel extends Panel {
 		
 		// Physics things
 		obj.draw(g, scale);
-		
+		m1.getVelocity().drawVector(g, m1.getPosition(), scale, Color.GREEN);
+		m2.getVelocity().drawVector(g, m2.getPosition(), scale, Color.GREEN);
 	}
 	
 	public void update(float scale) {

@@ -3,6 +3,7 @@ package tech.hackerlife.sim.physics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import tech.hackerlife.sim.Main;
 import tech.hackerlife.sim.maths.Vector2D;
 import tech.hackerlife.sim.physics.matter.*;
 
@@ -45,6 +46,21 @@ public class ObjectManager {
 	public void update(float scale) {
 		for (Thing t: things) {
 			t.update(scale, things);
+		}
+		for (Matter m: matter) {
+			if (m.translate) {
+				for (Thing t: things) {
+					if (!m.equals(t)) {
+						m.collision(t);
+					}
+				}
+			}
+			if (m.translate) {
+				m.moveTo(m.getPosition().add(m.getVelocity().divideScalar(Main.realTimeUPS)));
+			}
+		}
+		for (Matter m: matter) {
+			m.translate = true;
 		}
 	}
 

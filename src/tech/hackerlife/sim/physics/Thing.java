@@ -40,27 +40,9 @@ public abstract class Thing {
 		return position;
 	}
 	
-	/**
-	 * @param theta in radians
-	 */
-	public float getDistFromEdge(double theta) {
-		float dist;
-		float A = width / 2, B = height / 2;
-
-		dist = (float) Math.min(A / Math.cos(theta), B / Math.sin(theta));
-	
-		return dist;
+	public boolean isMatter() {
+		return false;
 	}
-	
-//	/**
-//	 * @param theta in radians
-//	 */
-//	public Vector2D getPointOnEdge(double theta) {
-//		float A = width / 2, B = height / 2;
-//		float dist = (float) Math.min(A / Math.cos(theta), B / Math.sin(theta));
-//		
-//		return new Vector2D((double)theta, dist).add(position);
-//	}
 	
 	/**
 	 * Default getArea method. Is overrided in Ball class

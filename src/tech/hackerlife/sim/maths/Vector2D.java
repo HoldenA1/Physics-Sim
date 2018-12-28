@@ -120,5 +120,9 @@ public class Vector2D {
 	public void setY(float y) {
 		this.y = y;
 	}
+	
+	public String toString() {
+		return "(" + x + ", " + y + ")";
+	}
 
 }
