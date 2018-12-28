@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import tech.hackerlife.sim.display.gui.GUIElement;
+import tech.hackerlife.sim.display.gui.Mouse;
 
 public class Slider extends GUIElement {
 	private int value = 0;
@@ -31,14 +32,14 @@ public class Slider extends GUIElement {
 		return this;
 	}
 
-	public void update(Graphics g, Point mouse, boolean mousePressed) {
+	public void update(Graphics g, Point mousePos, Mouse mouse) {
 		if (isVisible) {
-			hover = this.contains(mouse);
-			isPressed = hover && mousePressed;
+			hover = this.contains(mousePos);
+			isHeld = hover && mouse.mouseButtonPressed();
 			
-			if (isPressed) {
-				sliderPosition = mouse.x - (barWidth / 2);
-				value = (int) ((((double)(mouse.x) - x) / width) * 100);
+			if (isHeld) {
+				sliderPosition = mousePos.x - (barWidth / 2);
+				value = (int) ((((double)(mousePos.x) - x) / width) * 100);
 			}
 			
 			drawColor = chooseColor(isPressed, hover);

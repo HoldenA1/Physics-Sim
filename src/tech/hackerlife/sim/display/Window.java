@@ -6,15 +6,6 @@ public class Window extends JFrame {
 	private static final long serialVersionUID = 1L;
 	final int DEFAULT_WIDTH = 640, DEFAULT_HEIGHT = 480;
 	
-	public Window(String name) {
-		super(name);
-		setSize(WIDTH, HEIGHT);
-		setLocationRelativeTo(null);
-		setVisible(true);
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-	
 	public Window(String name, int width, int height) {
 		super(name);
 		setSize(width, height);
@@ -22,6 +13,10 @@ public class Window extends JFrame {
 		setVisible(true);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public Window(String name) {
+		this(name, WIDTH, HEIGHT);
 	}
 	
 }

@@ -4,20 +4,36 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import tech.hackerlife.sim.Main;
-import tech.hackerlife.sim.display.panels.Panel;
 import tech.hackerlife.sim.maths.Vector2D;
+import tech.hackerlife.sim.physics.Thing;
 
-abstract class Matter extends Thing {
+public abstract class Matter extends Thing {
 	private float mass;
 	private boolean constantAcceleration = false;
+	private boolean isElastic = true;
 	private Vector2D velocity = new Vector2D(0,0);
 	private Vector2D acceleration = new Vector2D(0,0);
 	private Vector2D forcesSum = new Vector2D(0,0);
-	private ArrayList<Vector2D> forces = new ArrayList<Vector2D>();
+	private ArrayList<Vector2D> constantForces = new ArrayList<Vector2D>();
 	
-	public Matter(float mass, Vector2D position, Vector2D velocity) {
-		super(position);
+	// Part of the collision stuff
+	public boolean translate = true;
+	
+	public Matter(float mass, Vector2D position, Vector2D velocity, float width, float height) {
+		super(position, width, height);
 		this.mass = mass;
+		if (velocity == null) {
+			velocity = new Vector2D(0,0);
+		}
+		this.velocity = velocity;
+	}
+	
+	public Matter(float mass, Vector2D position, Vector2D velocity, float radius) {
+		super(position, radius);
+		this.mass = mass;
+		if (velocity == null) {
+			velocity = new Vector2D(0,0);
+		}
 		this.velocity = velocity;
 	}
 	
@@ -32,58 +48,50 @@ abstract class Matter extends Thing {
 		return this;
 	}
 	
-	public void moveTo(Vector2D newPos) {
-		position = newPos;
+	public void setVelocity(Vector2D velocity) {
+		if (velocity == null) {
+			velocity = new Vector2D(0,0);
+		}
+		this.velocity = velocity;
 	}
 	
-	public void addForce(Vector2D force) {
-		forces.add(force);
-		forcesSum = forcesSum.add(force);
+	public void setElastic(boolean isElastic) {
+		this.isElastic = isElastic;
+	}
+	
+	public void addConstantForce(Vector2D force) {
+		constantForces.add(force);
 	}
 	
 	/**
 	 * @return true if force was removed, false if it wasn't present
 	 */
-	public boolean removeForce(Vector2D force) {
-		for (Vector2D f: forces) {
+	public boolean removeConstantForce(Vector2D force) {
+		for (Vector2D f: constantForces) {
 			if (force.equals(f)) {
-				forces.remove(f);
-				forcesSum = forcesSum.add(force.mult(-1));
+				constantForces.remove(f);
 				return true;
 			}
 		}
 		return false;
 	}
 	
+	public void addForce(Vector2D force) {
+		forcesSum = forcesSum.add(force);
+	}
+	
 	public void drawForces(Graphics g, float scale) {
-		Color temp = g.getColor();
-		g.setColor(Color.YELLOW);
-		
-		for (Vector2D force: forces) {
-			force.drawVector(g, position, scale);
+		for (Vector2D force: constantForces) {
+			force.drawVector(g, position, scale, Color.YELLOW);
 		}
-		g.setColor(temp);
 	}
 	
-	public void drawAcceleration(Graphics g, float scale) {
-		Color temp = g.getColor();
-		g.setColor(Color.RED);
+	public void update(float scale, ArrayList<Thing> things) {
+		// Gets the net force on the object
+		for (Vector2D f: constantForces) {
+			forcesSum = forcesSum.add(f);
+		}
 		
-		acceleration.drawVector(g, position, scale);
-		
-		g.setColor(temp);
-	}
-	
-	public void drawVelocity(Graphics g, float scale) {
-		Color temp = g.getColor();
-		g.setColor(Color.GREEN);
-		
-		velocity.drawVector(g, position, scale);
-		
-		g.setColor(temp);
-	}
-	
-	public void update(Panel panel, float scale) {
 		// Update acceleration
 		if (!constantAcceleration) {
 			acceleration = forcesSum.divideScalar(mass);
@@ -92,34 +100,111 @@ abstract class Matter extends Thing {
 		// Update velocity
 		velocity = velocity.add(acceleration.divideScalar(Main.realTimeUPS));
 		
-		// Update position
-		position = position.add(velocity.divideScalar(Main.realTimeUPS));
-		
-		checkEdges(96, panel.getHeight()/scale);
+		// Resets the net force to zero (it is summed every time)
+		forcesSum = new Vector2D(0,0);
 	}
 	
-	// TODO make collision for platforms
-	public void checkCollision(ArrayList<Thing> things) {
+	// Pls make look better it are spegett code
+	public void collision(Thing t) {
+		Vector2D scaledVelocity = velocity.divideScalar(Main.realTimeUPS);
+		Vector2D prevPos = position;
+		this.moveTo(position.add(scaledVelocity));
 		
-	}
-	
-	/**
-	 * TODO remove this
-	 * @param width of physics panel
-	 * @param height of physics panel
-	 */
-	public void checkEdges(float width, float height) {
-		Vector2D normalForce = forcesSum.mult(-1);
-		
-		if (position.Y() > height && acceleration.Y() != 0) {
-			position.setY(height);
-			velocity.setY(0);
-			this.addForce(normalForce);
+		if (t.isMatter()) {
+			Matter m = (Matter) t;
+			Vector2D scaledVelocityObj = m.getVelocity().divideScalar(Main.realTimeUPS);
+			Vector2D prevPosObj = m.getPosition();
+			m.moveTo(m.getPosition().add(scaledVelocityObj));
+			
+			if (hasCollided(m)) {
+				this.moveTo(prevPos);
+				m.moveTo(prevPosObj);
+
+				// Test X
+				this.moveTo(position.add(new Vector2D(scaledVelocity.X(), 0)));
+				m.moveTo(m.getPosition().add(new Vector2D(scaledVelocityObj.X(), 0)));
+				
+				if (hasCollided(m)) {
+					this.moveTo(prevPos);
+					m.moveTo(prevPosObj);
+					if (isElastic || m.isElastic()) {
+						float finalVelOfThis = 2 * m.getVelocity().X() * m.getMass() / (mass +  m.getMass());
+						float finalVelofOtherObject = 2 * velocity.X() * mass / (mass +  m.getMass());
+						velocity.setX(finalVelOfThis);
+						m.getVelocity().setX(finalVelofOtherObject);
+					} else {
+						float finalVel = (mass * velocity.X() + m.getMass() * m.getVelocity().X()) / (mass +  m.getMass());
+						velocity.setX(finalVel);
+						m.getVelocity().setX(finalVel);
+					}
+				}
+				
+				// Updates the previous position
+				prevPos = position;
+				prevPosObj = m.getPosition();
+				
+				// Test Y
+				this.moveTo(position.add(new Vector2D(0, scaledVelocity.Y())));
+				m.moveTo(m.getPosition().add(new Vector2D(0, scaledVelocityObj.Y())));
+				
+				if (hasCollided(m)) {
+					this.moveTo(prevPos);
+					m.moveTo(prevPosObj);
+					if (isElastic || m.isElastic()) {
+						float finalVelOfThis = 2 * m.getVelocity().Y() * m.getMass() / (mass +  m.getMass());
+						float finalVelofOtherObject = 2 * velocity.Y() * mass / (mass +  m.getMass());
+						velocity.setY(finalVelOfThis);
+						m.getVelocity().setY(finalVelofOtherObject);
+					} else {
+						float finalVel = (mass * velocity.Y() + m.getMass() * m.getVelocity().Y()) / (mass +  m.getMass());
+						velocity.setY(finalVel);
+						m.getVelocity().setY(finalVel);
+					}
+				}
+				this.translate = false;
+				m.translate = false;
+			}
+			m.moveTo(prevPosObj);	
+		} else {
+			if (hasCollided(t)) {
+				this.moveTo(prevPos);
+				// Test X
+				this.moveTo(position.add(new Vector2D(scaledVelocity.X(), 0)));
+				if (hasCollided(t)) {
+					this.moveTo(prevPos);
+					if (isElastic) {
+						velocity.setX(-velocity.X());
+					} else {
+						velocity.setX(0);
+					}
+				}
+				
+				// Updates the previous position
+				prevPos = position;
+				
+				// Test Y
+				this.moveTo(position.add(new Vector2D(0, scaledVelocity.Y())));
+				if (hasCollided(t)) {
+					this.moveTo(prevPos);
+					if (isElastic) {
+						velocity.setY(-velocity.Y());
+					} else {
+						velocity.setY(0);
+					}
+				}
+				this.translate = false;
+			}
 		}
+		this.moveTo(prevPos);
+		this.translate = true;
 	}
 	
-	public Vector2D getPosition() {
-		return position;
+	public boolean hasCollided(Thing t) {
+		return getArea().intersects(t.getArea().getBounds2D());
+	}
+	
+	public boolean isMatter() {
+		return true;
 	}
 	
 	public Vector2D getVelocity() {
@@ -128,6 +213,14 @@ abstract class Matter extends Thing {
 	
 	public Vector2D getAcceleration() {
 		return acceleration;
+	}
+	
+	public float getMass() {
+		return mass;
+	}
+	
+	public boolean isElastic() {
+		return isElastic;
 	}
 	
 }

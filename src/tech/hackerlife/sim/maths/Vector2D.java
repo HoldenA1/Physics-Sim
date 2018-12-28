@@ -1,13 +1,25 @@
 package tech.hackerlife.sim.maths;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Vector2D {
+	// Down is positive!!
 	float x, y;
+	final float VECTOR_ARROW_SIZE = 10;
 	
 	public Vector2D(float x, float y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	/**
+	 * @param angle in radians measured from the x-axis
+	 * @param mag is magnitude of vector
+	 */
+	public Vector2D(double theta, float mag) {
+		this.x = (float) (mag * Math.cos(theta));
+		this.y = (float) (mag * Math.sin(theta));
 	}
 	
 	public Vector2D add(Vector2D vec) {
@@ -52,6 +64,13 @@ public class Vector2D {
 		return this;
 	}
 	
+	/**
+	 * @return angle in radians
+	 */
+	public double dir() {
+		return Math.atan2(this.y, this.x);
+	}
+	
 	public boolean equals(Vector2D vec) {
 		return x == vec.X() && y == vec.Y();
 	}
@@ -59,14 +78,16 @@ public class Vector2D {
 	/**
 	 * @param scale Put 1 for normal use
 	 */
-	public void drawVector(Graphics g, Vector2D pos, float scale) {
+	public void drawVector(Graphics g, Vector2D pos, float scale, Color vectorColor) {
+		g.setColor(vectorColor);
+		
 		Vector2D scaledInitial = pos.mult(scale);
 		Vector2D scaledFinal = this.mult(scale);
 		scaledFinal = scaledFinal.add(scaledInitial);
 	    int dx = (int) (scaledFinal.X() - scaledInitial.X());
 	    int dy = (int) (scaledFinal.Y() - scaledInitial.Y());
 	    double D = Math.sqrt(dx*dx + dy*dy);
-	    double xm = D - scale, xn = xm, ym = scale, yn = -scale, x;
+	    double xm = D - VECTOR_ARROW_SIZE, xn = xm, ym = VECTOR_ARROW_SIZE, yn = -VECTOR_ARROW_SIZE, x;
 	    double sin = dy / D, cos = dx / D;
 
 	    x = xm*cos - ym*sin + scaledInitial.X();
@@ -99,4 +120,9 @@ public class Vector2D {
 	public void setY(float y) {
 		this.y = y;
 	}
+	
+	public String toString() {
+		return "(" + x + ", " + y + ")";
+	}
+
 }

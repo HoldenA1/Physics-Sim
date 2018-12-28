@@ -5,8 +5,6 @@ import java.awt.Graphics;
 import tech.hackerlife.sim.maths.Vector2D;
 
 public class Block extends Matter {
-	float width, height;
-	
 	/**
 	 * @param mass In kilograms
 	 * @param position In meters
@@ -15,9 +13,7 @@ public class Block extends Matter {
 	 * @param height In meters
 	 */
 	public Block(float mass, Vector2D position, Vector2D velocity, float width, float height) {
-		super(mass, position, velocity);
-		this.width = width;
-		this.height = height;
+		super(mass, position, velocity, width, height);
 	}
 	
 	public Block withAcceleration(Vector2D acceleraton) {
