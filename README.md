@@ -2,4 +2,7 @@
 A kinematics sim - In Progress
 
 ## TODO
-  * Add things to do
+  * Clean up collision
+  * Add graphing
+  * Add menus
+  * Add pure Simulation
