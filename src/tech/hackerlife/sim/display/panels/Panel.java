@@ -14,6 +14,8 @@ public abstract class Panel {
 	
 	public abstract void draw(Graphics g, JPanel panel, Mouse mouse, float scale);
 	
+	public abstract void update(float scale);
+	
 	public int getWidth() {
 		return width;
 	}

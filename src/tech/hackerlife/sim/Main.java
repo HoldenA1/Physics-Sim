@@ -5,15 +5,14 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 import tech.hackerlife.sim.display.*;
 import tech.hackerlife.sim.display.gui.Mouse;
-import tech.hackerlife.sim.display.panels.SimPanel;
+import tech.hackerlife.sim.display.panels.PanelManager;
 
 public class Main extends JPanel {
-	
 	// Frame variables
 	final static String NAME = "Physics Simulation";
 	final static int WIDTH = 1280, HEIGHT = 720;
 	private static final long serialVersionUID = 1L;
-	public final static float SCALE = 20; // Pixels per meter
+	public final static float SCALE = 10; // Pixels per meter
 	
 	// Update loop variables
 	long lastTime = System.nanoTime();
@@ -27,7 +26,7 @@ public class Main extends JPanel {
 	static double ups = 50.0;
 	
 	// Panels
-	SimPanel panel = new SimPanel(WIDTH, HEIGHT-40);
+	PanelManager pm = new PanelManager(WIDTH, HEIGHT);
 	
 	Mouse mouse;
 	
@@ -46,7 +45,7 @@ public class Main extends JPanel {
 		super.paintComponent(g);
 		this.setBackground(Color.LIGHT_GRAY);
 		
-		panel.draw(g, this, mouse, SCALE);
+		pm.draw(g, this, mouse, SCALE);
 		
 		update();
 		
@@ -61,7 +60,7 @@ public class Main extends JPanel {
 		while (delta >= 1) {
 			
 			// Call your updates here
-			panel.update(SCALE);
+			pm.update(SCALE);
 
 			updates++;
 			delta--;

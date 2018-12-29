@@ -15,6 +15,14 @@ public class Window extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	/**
+	 * @param operation use JFrame.EXIT_ON_CLOSE for example
+	 */
+	public Window changeCloseOperation(int operation) {
+		setDefaultCloseOperation(operation);
+		return this;		
+	}
+	
 	public Window(String name) {
 		this(name, WIDTH, HEIGHT);
 	}
