@@ -3,6 +3,8 @@ package tech.hackerlife.sim.display.panels;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
+
+import tech.hackerlife.sim.display.GraphingTool;
 import tech.hackerlife.sim.display.gui.GUIManager;
 import tech.hackerlife.sim.display.gui.Mouse;
 import tech.hackerlife.sim.display.gui.button.Button;
@@ -19,16 +21,15 @@ public class SimPanel extends Panel {
 	
 	// GUI Objects
 	GUIManager gui = new GUIManager();
-	Button b1;
+	Button openGraphingToolButton;
 	
 	// Constants
 	final float g = 9.8f;//N/kg
 	
 	// Physics objects
-	ObjectManager obj = new ObjectManager();
 	float mass = 1;//kg
 	float gravity = mass * g;
-	Block m1;
+	Block m1, m2;
 	Platform p;
 
 	public SimPanel (int width, int height) {
@@ -40,17 +41,20 @@ public class SimPanel extends Panel {
 		origin = new Vector2D(0.5f, 0.5f); // Not at (0, 0) for better visibility
 		
 		// GUI stuff
-		b1 = new Button("Apply Normal Force", 900, 100).withColor(Color.GRAY);
-		gui.add(b1);
+		openGraphingToolButton = new Button("Open Graphing Tool", 900, 100).withColor(Color.GRAY);
+		gui.add(openGraphingToolButton);
 		
 		// Physics Stuff
+		objectManager = new ObjectManager();
 		m1 = new Block(mass, new Vector2D(30,6), new Vector2D(2, 0), 1f, 3f).withColor(Color.BLUE);
+		m2 = new Block(mass, new Vector2D(40,6), new Vector2D(-2, 0), 1f, 3f).withName("Hello");
 		p = new Platform(new Vector2D(50, 40), 40, 1f);
-		obj.add(m1);
-		obj.add(p);
+		objectManager.add(m1);
+		objectManager.add(m2);
+		objectManager.add(p);
 
 		// Add gravity
-		obj.addGravity();
+		objectManager.addGravity();
 	}
 	
 	public void draw(Graphics g, JPanel panel, Mouse mouse, float scale) {
@@ -64,14 +68,17 @@ public class SimPanel extends Panel {
 		
 		// GUI things
 		gui.updateElements(g, panel, mouse);
+		if (openGraphingToolButton.isPressed()) {
+			new GraphingTool(objectManager);
+		}
 		
 		// Physics things
-		obj.draw(g, scale);
+		objectManager.draw(g, scale);
 		m1.getVelocity().drawVector(g, m1.getPosition(), scale, Color.GREEN);
 	}
 	
 	public void update(float scale) {
-		obj.update(scale);
+		objectManager.update(scale);
 	}
 
 }

@@ -63,5 +63,9 @@ public class ObjectManager {
 			m.translate = true;
 		}
 	}
+	
+	public ArrayList<Matter> getMatterList() {
+		return matter;
+	}
 
 }

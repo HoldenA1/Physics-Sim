@@ -23,18 +23,20 @@ public abstract class Matter extends Thing {
 		super(position, width, height);
 		this.mass = mass;
 		if (velocity == null) {
-			velocity = new Vector2D(0,0);
+			this.velocity = new Vector2D(0,0);
+		} else {
+			this.velocity = velocity;
 		}
-		this.velocity = velocity;
 	}
 	
 	public Matter(float mass, Vector2D position, Vector2D velocity, float radius) {
 		super(position, radius);
 		this.mass = mass;
 		if (velocity == null) {
-			velocity = new Vector2D(0,0);
+			this.velocity = new Vector2D(0,0);
+		} else {
+			this.velocity = velocity;
 		}
-		this.velocity = velocity;
 	}
 	
 	public Matter withColor(Color color) {

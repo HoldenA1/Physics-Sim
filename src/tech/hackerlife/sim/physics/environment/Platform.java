@@ -7,11 +7,14 @@ import tech.hackerlife.sim.maths.Vector2D;
 import tech.hackerlife.sim.physics.Thing;
 
 public class Platform extends Thing {
+	private static int numberOfPlatforms = 0;
 	/**
 	 * All parameters are in meters
 	 */
 	public Platform(Vector2D position, float width, float height) {
 		super(position, width, height);
+		numberOfPlatforms++;
+		name = "Platform " + Integer.toString(numberOfPlatforms);
 	}
 	
 	public Platform withColor(Color color) {

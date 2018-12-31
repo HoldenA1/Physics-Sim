@@ -9,17 +9,17 @@ import tech.hackerlife.sim.display.panels.PanelManager;
 
 public class Main extends JPanel {
 	// Frame variables
-	final static String NAME = "Physics Simulation";
-	final static int WIDTH = 1280, HEIGHT = 720;
+	private final static String NAME = "Physics Simulation";
+	private final static int WIDTH = 1280, HEIGHT = 720;
 	private static final long serialVersionUID = 1L;
 	public final static float SCALE = 10; // Pixels per meter
 	
 	// Update loop variables
-	long lastTime = System.nanoTime();
-	long timer = System.currentTimeMillis();
-	final double ns = 1000000000.0 / ups;
-	double delta = 0;
-	int updates = 0;
+	private long lastTime = System.nanoTime();
+	private long timer = System.currentTimeMillis();
+	private final double ns = 1000000000.0 / ups;
+	private double delta = 0;
+	private int updates = 0;
 	
 	// Game speed - 50.0 is real-time
 	public static final float realTimeUPS = 50.0f;
