@@ -18,6 +18,12 @@ public class GraphingTool extends JPanel {
 	private final String NAME = "Graphing Tool";
 	private static final long serialVersionUID = 3598369832919534225L;
 	
+	enum Screens {
+		OBJECT_SELECTION, GRAPHING;
+	}
+	
+	Screens screen = Screens.OBJECT_SELECTION;
+	
 	Mouse mouse;
 	ObjectManager manager;
 	
@@ -50,21 +56,25 @@ public class GraphingTool extends JPanel {
 		
 		gui.updateElements(g, this, mouse);
 		
-		for (Button b: matterSelection) {
-			if (b.isPressed()) {
-				for (Button button: matterSelection) {
-					button.setVisibility(false);
-				}
-				for (Matter m: matter) {
-					if (m.getName().equals(b.getLabel())) {
-						selectedObject = m;
+		switch(screen) {
+		case OBJECT_SELECTION:
+			for (Button b: matterSelection) {
+				if (b.isPressed()) {
+					for (Button button: matterSelection) {
+						button.setVisibility(false);
 					}
+					for (Matter m: matter) {
+						if (m.getName().equals(b.getLabel())) {
+							selectedObject = m;
+						}
+					}
+					screen = Screens.GRAPHING;
 				}
 			}
-		}
-		
-		if (selectedObject != null) {
+			break;
+		case GRAPHING:
 			g.drawString(selectedObject.getPosition().toString(), 50, 50);
+			break;
 		}
 		
 		repaint();
