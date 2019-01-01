@@ -11,6 +11,7 @@ import tech.hackerlife.sim.display.gui.GUIManager;
 import tech.hackerlife.sim.display.gui.Mouse;
 import tech.hackerlife.sim.display.gui.button.Button;
 import tech.hackerlife.sim.display.gui.checkBox.CheckBox;
+import tech.hackerlife.sim.display.gui.graph.Graph;
 import tech.hackerlife.sim.physics.ObjectManager;
 import tech.hackerlife.sim.physics.matter.Matter;
 
@@ -41,11 +42,12 @@ public class GraphingTool extends JPanel {
 	boolean changeDataSelectionVisibility = false;
 	CheckBox[] displayDataBoxes = new CheckBox[4];
 	String[] displayDataBoxLabels = {"position", "velocity", "acceleration", "net-force"};
-	Button graph;
+	Button graphButton;
 	
 	// Graphing
 	boolean changeGraphingVisibility = false;
 	ArrayList<String> thingsToGraph = new ArrayList<String>();
+	Graph graph;
 	
 	public GraphingTool(ObjectManager manager) {
 		mouse = new Mouse();
@@ -74,9 +76,9 @@ public class GraphingTool extends JPanel {
 			displayDataBoxes[i].setVisibility(false);
 			gui.add(displayDataBoxes[i]);
 		}
-		graph = new Button("Graph", 300, 50).withColor(Color.CYAN);
-		graph.setVisibility(false);
-		gui.add(graph);
+		graphButton = new Button("Graph", 300, 50).withColor(Color.CYAN);
+		graphButton.setVisibility(false);
+		gui.add(graphButton);
 		
 		// Creates the window
 		Window graphingToolFrame = new Window(NAME, WIDTH, HEIGHT).changeCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
@@ -107,7 +109,7 @@ public class GraphingTool extends JPanel {
 			}
 			break;
 		case DATA_SELECTION:
-			if (graph.isPressed()) {
+			if (graphButton.isPressed()) {
 				for (CheckBox box: displayDataBoxes) {
 					if (box.isChecked()) {
 						thingsToGraph.add(box.getLabel());
@@ -115,12 +117,12 @@ public class GraphingTool extends JPanel {
 				}
 				changeDataSelectionVisibility = true;
 				changeGraphingVisibility = true;
+				graph = new Graph("Time (s)", "Position (m)", WIDTH, HEIGHT);
 				panel = Panels.GRAPHING;
 			}
 			break;
 		case GRAPHING:
-			g.drawString(selectedObject.getPosition().toString(), 50, 50);
-			g.drawString(thingsToGraph.toString(), 50, 100);
+			graph.draw(g);
 			break;
 		}
 		
@@ -138,7 +140,7 @@ public class GraphingTool extends JPanel {
 			for (CheckBox box: displayDataBoxes) {
 				box.setVisibility(!box.isVisible());
 			}
-			graph.setVisibility(!graph.isVisible());
+			graphButton.setVisibility(!graphButton.isVisible());
 			changeDataSelectionVisibility = false;
 		}
 		if (changeGraphingVisibility) {
