@@ -17,13 +17,13 @@ public class Main extends JPanel {
 	// Update loop variables
 	private long lastTime = System.nanoTime();
 	private long timer = System.currentTimeMillis();
-	private final double ns = 1000000000.0 / ups;
+	private double ns = 1000000000.0 / ups;
 	private double delta = 0;
 	private int updates = 0;
 	
-	// Game speed - 50.0 is real-time
+	// When ups is 50, things move in real-time
 	public static final float realTimeUPS = 50.0f;
-	static double ups = 50.0;
+	public static double ups = 0.0;
 	
 	// Panels
 	PanelManager pm = new PanelManager(WIDTH, HEIGHT);
@@ -54,6 +54,7 @@ public class Main extends JPanel {
 	
 	private void update() {
 		// This is the update loop
+		ns = 1000000000.0 / ups;
 		long now = System.nanoTime();
 		delta += (now - lastTime) / ns;
 		lastTime = now;
