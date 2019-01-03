@@ -12,8 +12,10 @@ public class Graph {
 	private int yBuffer = CHAR_HEIGHT * 4;// Space for a char and for a line
 	
 	private float minX, maxX, maxY, minY;
-	private int xScale = 1, yScale = 1; // Distance between lines
-	private float xNumOfLines = 5, yNumOfLines = 5;
+	private int xScale, yScale; // Distance between lines
+	private int xNumOfLines = 7, yNumOfLines = 6;
+	int[] xLabels = {0,1,2,3,4,5,6};//new int[xNumOfLines];
+	int[] yLabels = {0,1,2,3,4,5};//new int[yNumOfLines];
 	
 	private String title;
 	private Font normalFont = new Font(Font.MONOSPACED, Font.PLAIN, 25);
@@ -25,8 +27,8 @@ public class Graph {
 		titleX = width / 2 - (title.length() * CHAR_WIDTH) / 2;
 		this.width = width - CHAR_WIDTH * 2; // so its not going through the side
 		this.height = height;
-		xScale = (int) ((this.width - xBuffer) / xNumOfLines);
-		yScale = (int) ((this.height - yBuffer - titleY) / yNumOfLines);
+		xScale = (int) ((this.width - xBuffer) / (xNumOfLines-1));
+		yScale = (int) ((this.height - yBuffer - titleY) / (yNumOfLines-1));
 	}
 	
 	public void addData(Vector2D dataPoint) {
@@ -54,13 +56,19 @@ public class Graph {
 		g.drawLine(xBuffer, height - yBuffer, width, height - yBuffer); // Horizontal
 		
 		// Draw Scale
-		for (int yLines = 0; yLines <= yNumOfLines; yLines++) { // Vertical
+		for (int yLines = 0; yLines < yNumOfLines; yLines++) { // Vertical
 			// Vertical is minus since up is positive
 			g.drawLine(xBuffer - CHAR_WIDTH / 2, height - yBuffer - yLines * yScale, xBuffer + CHAR_WIDTH / 2, height - yBuffer - yLines * yScale);
+			// Labels
+			g.drawString(Integer.toString(yLabels[yLines]), xBuffer - CHAR_WIDTH, height - yBuffer - yLines * yScale);
 		}
-		for (int xLines = 0; xLines <= xNumOfLines; xLines++) { // Horizontal
+		for (int xLines = 0; xLines < xNumOfLines; xLines++) { // Horizontal
 			g.drawLine(xBuffer + xLines * xScale, height - yBuffer - CHAR_HEIGHT / 2, xBuffer + xLines * xScale, height - yBuffer + CHAR_HEIGHT / 2);
+			// Labels
+			g.drawString(Integer.toString(xLabels[xLines]), xBuffer + xLines * xScale, height - yBuffer + CHAR_HEIGHT);
 		}
+		
+		// Draw Line
 	}
 
 }

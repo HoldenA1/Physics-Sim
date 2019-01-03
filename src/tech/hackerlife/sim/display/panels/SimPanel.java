@@ -2,6 +2,8 @@ package tech.hackerlife.sim.display.panels;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 
 import tech.hackerlife.sim.Main;
@@ -17,6 +19,7 @@ public class SimPanel extends Panel {
 	// GUI Objects
 	GUIManager gui = new GUIManager();
 	Button openGraphingToolButton, playButton, pauseButton;
+	ArrayList<GraphingTool> graphingTools = new ArrayList<GraphingTool>();
 	
 	// Constants
 	final float g = 9.8f;//N/kg
@@ -30,11 +33,11 @@ public class SimPanel extends Panel {
 		super(width, height);
 		
 		// GUI stuff
-		openGraphingToolButton = new Button("Open Graphing Tool", 900, 100).withColor(Color.GRAY);
+		openGraphingToolButton = new Button("Open Graphing Tool", 900, 200).withColor(Color.GRAY);
 		gui.add(openGraphingToolButton);
-		playButton = new Button("Play", 900, 200, 200, 50).withColor(Color.GREEN);
+		playButton = new Button("Play", 900, 100, 200, 50).withColor(Color.GREEN);
 		gui.add(playButton);
-		pauseButton = new Button("Pause", 900, 200, 200, 50).withColor(Color.RED);
+		pauseButton = new Button("Pause", 900, 100, 200, 50).withColor(Color.RED);
 		pauseButton.setVisibility(false);
 		gui.add(pauseButton);
 		
@@ -66,7 +69,7 @@ public class SimPanel extends Panel {
 		// GUI things
 		gui.updateElements(g, panel, mouse);
 		if (openGraphingToolButton.isPressed()) {
-			new GraphingTool(objectManager);
+			graphingTools.add(new GraphingTool(objectManager));
 		}
 		
 		// Physics things
@@ -76,6 +79,10 @@ public class SimPanel extends Panel {
 	
 	public void update(float scale) {
 		objectManager.update(scale);
+		
+		for (GraphingTool g: graphingTools) {
+			g.update();
+		}
 	}
 
 }

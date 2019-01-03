@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import tech.hackerlife.sim.Main;
 import tech.hackerlife.sim.display.gui.GUIManager;
 import tech.hackerlife.sim.display.gui.Mouse;
 import tech.hackerlife.sim.display.gui.button.Button;
 import tech.hackerlife.sim.display.gui.checkBox.CheckBox;
 import tech.hackerlife.sim.display.gui.graph.Graph;
+import tech.hackerlife.sim.maths.Vector2D;
 import tech.hackerlife.sim.physics.ObjectManager;
 import tech.hackerlife.sim.physics.matter.Matter;
 
@@ -41,13 +43,14 @@ public class GraphingTool extends JPanel {
 	// Data Selection
 	boolean changeDataSelectionVisibility = false;
 	CheckBox[] displayDataBoxes = new CheckBox[4];
-	String[] displayDataBoxLabels = {"position", "velocity", "acceleration", "net-force"};
+	String[] displayDataBoxLabels = {"Position (m)", "Velocity (m/s)", "Acceleration (m/s/s)", "Force (N)"};
 	Button graphButton;
 	
 	// Graphing
 	boolean changeGraphingVisibility = false;
 	ArrayList<String> thingsToGraph = new ArrayList<String>();
 	Graph graph;
+	private int updates = 0;
 	
 	public GraphingTool(ObjectManager manager) {
 		mouse = new Mouse();
@@ -113,12 +116,12 @@ public class GraphingTool extends JPanel {
 				for (CheckBox box: displayDataBoxes) {
 					if (box.isChecked()) {
 						thingsToGraph.add(box.getLabel());
+						changeDataSelectionVisibility = true;
+						changeGraphingVisibility = true;
+						graph = new Graph("Time (s)", thingsToGraph.get(0), WIDTH, HEIGHT);
+						panel = Panels.GRAPHING;
 					}
 				}
-				changeDataSelectionVisibility = true;
-				changeGraphingVisibility = true;
-				graph = new Graph("Time (s)", "Position (m)", WIDTH, HEIGHT);
-				panel = Panels.GRAPHING;
 			}
 			break;
 		case GRAPHING:
@@ -127,6 +130,18 @@ public class GraphingTool extends JPanel {
 		}
 		
 		repaint();
+	}
+	
+	public void update() {
+		if (thingsToGraph.get(0) != null) {
+			String thingToGraph = thingsToGraph.get(0);
+			for (String t: displayDataBoxLabels) {
+				if (thingToGraph == t) {
+					graph.addData(new Vector2D(selectedObject.getPosition().X(), (float)(updates / Main.realTimeUPS)));
+				}
+			}
+			updates++;
+		}
 	}
 	
 	private void checkChangeVisibilities() {
