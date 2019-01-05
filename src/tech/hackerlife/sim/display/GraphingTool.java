@@ -2,6 +2,8 @@ package tech.hackerlife.sim.display;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -23,9 +25,13 @@ public class GraphingTool extends JPanel {
 	private static final long serialVersionUID = 3598369832919534225L;
 	private final int WIDTH = 640;
 	private final int HEIGHT = 480;
+	private final static int HEIGHT_OFFSET = 40;
+	private final static int WIDTH_OFFSET = 17;
+	
+	private float lastTime = 0;
 	
 	enum Panels {
-		OBJECT_SELECTION, DATA_SELECTION, GRAPHING;
+		OBJECT_SELECTION, DATA_SELECTION, AXIS_SELECTION, GRAPHING;
 	}
 	
 	Panels panel = Panels.OBJECT_SELECTION;
@@ -43,11 +49,15 @@ public class GraphingTool extends JPanel {
 	// Data Selection
 	boolean changeDataSelectionVisibility = false;
 	CheckBox[] displayDataBoxes = new CheckBox[4];
-	String[] displayDataBoxLabels = {"Position (m)", "Velocity (m/s)", "Acceleration (m/s/s)", "Force (N)"};
+	String[] displayDataBoxLabels = {"Position", "Velocity", "Acceleration", "Force"};
 	Button graphButton;
 	
+	// Axis Selection
+	boolean changeAxisSelectionVisibility = false;
+	Button xAxis, yAxis;
+	boolean graphX;
+	
 	// Graphing
-	boolean changeGraphingVisibility = false;
 	ArrayList<String> thingsToGraph = new ArrayList<String>();
 	Graph graph;
 	private int updates = 0;
@@ -55,6 +65,7 @@ public class GraphingTool extends JPanel {
 	public GraphingTool(ObjectManager manager) {
 		mouse = new Mouse();
 		this.addMouseListener(mouse);
+		this.addComponentListener(new ResizeListener());
 		
 		this.manager = manager;
 		
@@ -83,8 +94,16 @@ public class GraphingTool extends JPanel {
 		graphButton.setVisibility(false);
 		gui.add(graphButton);
 		
+		// Axis Selection
+		xAxis = new Button("X-Axis", 20, 50);
+		yAxis = new Button("Y-Axis", 20, 150);
+		xAxis.setVisibility(false);
+		yAxis.setVisibility(false);
+		gui.add(xAxis);
+		gui.add(yAxis);
+		
 		// Creates the window
-		Window graphingToolFrame = new Window(NAME, WIDTH, HEIGHT).changeCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
+		Window graphingToolFrame = new Window(NAME, WIDTH, HEIGHT).changeCloseOperation(JFrame.DISPOSE_ON_CLOSE).setResizeable(true);	
 		graphingToolFrame.add(this);
 	}
 	
@@ -117,11 +136,27 @@ public class GraphingTool extends JPanel {
 					if (box.isChecked()) {
 						thingsToGraph.add(box.getLabel());
 						changeDataSelectionVisibility = true;
-						changeGraphingVisibility = true;
-						graph = new Graph("Time (s)", thingsToGraph.get(0), WIDTH, HEIGHT);
-						panel = Panels.GRAPHING;
+						changeAxisSelectionVisibility = true;
+						panel = Panels.AXIS_SELECTION;
 					}
 				}
+			}
+			break;
+		case AXIS_SELECTION:
+			if (xAxis.isPressed() || yAxis.isPressed()) {
+				if (xAxis.isPressed()) {
+					graphX = true;
+				} else {
+					graphX = false;
+				}
+				changeAxisSelectionVisibility = true;
+				String[] labels = new String[thingsToGraph.size()];
+				for (int i = 0; i < thingsToGraph.size(); i++) {
+					labels[i] = thingsToGraph.get(i);
+				}
+				graph = new Graph("Time", labels, WIDTH - WIDTH_OFFSET, HEIGHT - HEIGHT_OFFSET);
+				graph.displayGrid(true);
+				panel = Panels.GRAPHING;
 			}
 			break;
 		case GRAPHING:
@@ -133,12 +168,34 @@ public class GraphingTool extends JPanel {
 	}
 	
 	public void update() {
-		if (thingsToGraph.get(0) != null) {
-			String thingToGraph = thingsToGraph.get(0);
-			for (String t: displayDataBoxLabels) {
-				if (thingToGraph == t) {
-					graph.addData(new Vector2D(selectedObject.getPosition().X(), (float)(updates / Main.realTimeUPS)));
+		if (panel == Panels.GRAPHING) {
+			float time = (float) (updates / Main.realTimeUPS);
+			if (time - lastTime > 0.25 || time == 0) {
+				for (int i = 0; i < thingsToGraph.size(); i++) {
+					String thingToGraph = thingsToGraph.get(i);
+					float position, velocity, acceleration, force;
+					if (graphX) {
+						position = selectedObject.getPosition().X();
+						velocity = selectedObject.getVelocity().X();
+						acceleration = selectedObject.getAcceleration().X();
+						force = selectedObject.getForce().X();
+					} else {
+						position = selectedObject.getPosition().Y();
+						velocity = selectedObject.getVelocity().Y();
+						acceleration = selectedObject.getAcceleration().Y();
+						force = selectedObject.getForce().Y();
+					}
+					if (thingToGraph.equals(displayDataBoxLabels[0])) {
+						graph.addData(i, new Vector2D(time, position));
+					} else if (thingToGraph.equals(displayDataBoxLabels[1])) {
+						graph.addData(i, new Vector2D(time, velocity));
+					} else if (thingToGraph.equals(displayDataBoxLabels[2])) {
+						graph.addData(i, new Vector2D(time, acceleration));
+					} else if (thingToGraph.equals(displayDataBoxLabels[3])) {
+						graph.addData(i, new Vector2D(time, force));
+					}
 				}
+				lastTime = time;
 			}
 			updates++;
 		}
@@ -158,10 +215,20 @@ public class GraphingTool extends JPanel {
 			graphButton.setVisibility(!graphButton.isVisible());
 			changeDataSelectionVisibility = false;
 		}
-		if (changeGraphingVisibility) {
+		if (changeAxisSelectionVisibility) {
+			xAxis.setVisibility(!xAxis.isVisible());
+			yAxis.setVisibility(!yAxis.isVisible());
+			changeAxisSelectionVisibility = false;
 			
-			changeGraphingVisibility = false;
 		}
+	}
+	
+	class ResizeListener extends ComponentAdapter {
+        public void componentResized(ComponentEvent e) {
+        	if (!(graph == null)) {
+        		graph.resize(e.getComponent().getSize().width - WIDTH_OFFSET, e.getComponent().getSize().height);
+        	}
+        }
 	}
 
 }

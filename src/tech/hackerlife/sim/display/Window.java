@@ -23,6 +23,11 @@ public class Window extends JFrame {
 		return this;		
 	}
 	
+	public Window setResizeable(boolean isResizable) {
+		setResizable(isResizable);
+		return this;		
+	}
+	
 	public Window(String name) {
 		this(name, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
