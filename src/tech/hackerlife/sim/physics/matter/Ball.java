@@ -7,6 +7,7 @@ import java.awt.geom.Ellipse2D;
 import tech.hackerlife.sim.maths.Vector2D;
 
 public class Ball extends Matter {
+	private static int numberOfBalls = 0;
 	/**
 	 * @param mass In kilograms
 	 * @param position In meters
@@ -16,6 +17,8 @@ public class Ball extends Matter {
 	 */
 	public Ball(float mass, Vector2D position, Vector2D velocity, float radius) {
 		super(mass, position, velocity, radius);
+		numberOfBalls++;
+		name = "Ball " + Integer.toString(numberOfBalls);
 	}
 	
 	public Ball withAcceleration(Vector2D acceleraton) {
@@ -25,6 +28,11 @@ public class Ball extends Matter {
 	
 	public Ball withColor(Color color) {
 		super.withColor(color);
+		return this;
+	}
+	
+	public Ball withName(String name) {
+		super.withName(name);
 		return this;
 	}
 

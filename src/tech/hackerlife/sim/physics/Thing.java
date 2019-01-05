@@ -11,6 +11,7 @@ public abstract class Thing {
 	protected Vector2D position;
 	protected float width, height;
 	protected float radius;
+	protected String name;
 	
 	public Thing(Vector2D position, float width, float height) {
 		this.position = position;
@@ -21,6 +22,11 @@ public abstract class Thing {
 	public Thing(Vector2D position, float radius) {
 		this.position = position;
 		this.radius = radius;
+	}
+	
+	public Thing withName(String name) {
+		this.name = name;
+		return this;
 	}
 	
 	public Thing withColor(Color color) {
@@ -49,6 +55,10 @@ public abstract class Thing {
 	 */
 	public Area getArea() {
 		return new Area(new Rectangle2D.Float(position.X()-(width*0.5f), position.Y()-(height*0.5f), width, height));
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 }

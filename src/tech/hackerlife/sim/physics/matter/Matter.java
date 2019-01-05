@@ -23,18 +23,20 @@ public abstract class Matter extends Thing {
 		super(position, width, height);
 		this.mass = mass;
 		if (velocity == null) {
-			velocity = new Vector2D(0,0);
+			this.velocity = new Vector2D(0,0);
+		} else {
+			this.velocity = velocity;
 		}
-		this.velocity = velocity;
 	}
 	
 	public Matter(float mass, Vector2D position, Vector2D velocity, float radius) {
 		super(position, radius);
 		this.mass = mass;
 		if (velocity == null) {
-			velocity = new Vector2D(0,0);
+			this.velocity = new Vector2D(0,0);
+		} else {
+			this.velocity = velocity;
 		}
-		this.velocity = velocity;
 	}
 	
 	public Matter withColor(Color color) {
@@ -87,6 +89,9 @@ public abstract class Matter extends Thing {
 	}
 	
 	public void update(float scale, ArrayList<Thing> things) {
+		// Resets the net force to zero (it is summed every time)
+		forcesSum = new Vector2D(0,0);
+		
 		// Gets the net force on the object
 		for (Vector2D f: constantForces) {
 			forcesSum = forcesSum.add(f);
@@ -99,9 +104,6 @@ public abstract class Matter extends Thing {
 		
 		// Update velocity
 		velocity = velocity.add(acceleration.divideScalar(Main.realTimeUPS));
-		
-		// Resets the net force to zero (it is summed every time)
-		forcesSum = new Vector2D(0,0);
 	}
 	
 	// Pls make look better it are spegett code
@@ -213,6 +215,10 @@ public abstract class Matter extends Thing {
 	
 	public Vector2D getAcceleration() {
 		return acceleration;
+	}
+	
+	public Vector2D getForce() {
+		return forcesSum;
 	}
 	
 	public float getMass() {

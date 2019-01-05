@@ -79,5 +79,9 @@ public abstract class GUIElement {
 	public boolean isVisible() {
 		return isVisible;
 	}
+	
+	public String getLabel() {
+		return label;
+	}
 
 }

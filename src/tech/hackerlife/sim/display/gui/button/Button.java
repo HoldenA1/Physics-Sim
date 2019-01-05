@@ -43,6 +43,8 @@ public class Button extends GUIElement {
 			g.setColor(textColor);
 			g.setFont(normalFont);
 			g.drawString(label, width/2-(CHAR_SIZE*label.length())/2+x, height/2+13+y);
+		} else {
+			isPressed = false;
 		}
 	}
 	
