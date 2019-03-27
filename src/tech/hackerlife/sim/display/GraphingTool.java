@@ -5,17 +5,11 @@ import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+import tech.hackerlife.graph.Graph;
+import tech.hackerlife.gui.*;
 import tech.hackerlife.sim.Main;
-import tech.hackerlife.sim.display.gui.GUIManager;
-import tech.hackerlife.sim.display.gui.Mouse;
-import tech.hackerlife.sim.display.gui.button.Button;
-import tech.hackerlife.sim.display.gui.checkBox.CheckBox;
-import tech.hackerlife.sim.display.gui.graph.Graph;
-import tech.hackerlife.sim.maths.Vector2D;
 import tech.hackerlife.sim.physics.ObjectManager;
 import tech.hackerlife.sim.physics.matter.Matter;
 
@@ -171,6 +165,10 @@ public class GraphingTool extends JPanel {
 		if (panel == Panels.GRAPHING) {
 			float time = (float) (updates / Main.realTimeUPS);
 			if (time - lastTime > 0.25 || time == 0) {
+				float[] yValues = new float[thingsToGraph.size()];
+				
+				ArrayList<Float> values = new ArrayList<Float>();
+
 				for (int i = 0; i < thingsToGraph.size(); i++) {
 					String thingToGraph = thingsToGraph.get(i);
 					float position, velocity, acceleration, force;
@@ -185,16 +183,17 @@ public class GraphingTool extends JPanel {
 						acceleration = selectedObject.getAcceleration().Y();
 						force = selectedObject.getForce().Y();
 					}
-					if (thingToGraph.equals(displayDataBoxLabels[0])) {
-						graph.addData(i, new Vector2D(time, position));
-					} else if (thingToGraph.equals(displayDataBoxLabels[1])) {
-						graph.addData(i, new Vector2D(time, velocity));
-					} else if (thingToGraph.equals(displayDataBoxLabels[2])) {
-						graph.addData(i, new Vector2D(time, acceleration));
-					} else if (thingToGraph.equals(displayDataBoxLabels[3])) {
-						graph.addData(i, new Vector2D(time, force));
-					}
+					if (thingToGraph.equals(displayDataBoxLabels[0])) values.add(position);
+					else if (thingToGraph.equals(displayDataBoxLabels[1])) values.add(velocity);
+					else if (thingToGraph.equals(displayDataBoxLabels[2])) values.add(acceleration);
+					else if (thingToGraph.equals(displayDataBoxLabels[3])) values.add(force);
 				}
+				for (int i = 0; i < yValues.length; i++) {
+					yValues[i] = values.get(i);
+				}
+				
+				graph.addData(time, yValues);
+				
 				lastTime = time;
 			}
 			updates++;

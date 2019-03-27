@@ -4,22 +4,22 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.*;
 import java.util.ArrayList;
-import tech.hackerlife.sim.maths.Vector2D;
+import tech.hackerlife.math.Vector2f;
 
 public abstract class Thing {
 	protected Color color = Color.GRAY;
-	protected Vector2D position;
+	protected Vector2f position;
 	protected float width, height;
 	protected float radius;
 	protected String name;
 	
-	public Thing(Vector2D position, float width, float height) {
+	public Thing(Vector2f position, float width, float height) {
 		this.position = position;
 		this.width = width;
 		this.height = height;
 	}
 	
-	public Thing(Vector2D position, float radius) {
+	public Thing(Vector2f position, float radius) {
 		this.position = position;
 		this.radius = radius;
 	}
@@ -34,7 +34,7 @@ public abstract class Thing {
 		return this;
 	}
 	
-	public void moveTo(Vector2D newPos) {
+	public void moveTo(Vector2f newPos) {
 		position = newPos;
 	}
 	
@@ -42,7 +42,7 @@ public abstract class Thing {
 	
 	public abstract void draw(Graphics g, float scale);
 	
-	public Vector2D getPosition() {
+	public Vector2f getPosition() {
 		return position;
 	}
 	

@@ -3,8 +3,7 @@ package tech.hackerlife.sim;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
-import tech.hackerlife.sim.display.*;
-import tech.hackerlife.sim.display.gui.Mouse;
+import tech.hackerlife.gui.*;
 import tech.hackerlife.sim.display.panels.PanelManager;
 
 public class Main extends JPanel {

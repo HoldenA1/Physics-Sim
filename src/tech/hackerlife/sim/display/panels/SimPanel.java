@@ -8,10 +8,8 @@ import javax.swing.JPanel;
 
 import tech.hackerlife.sim.Main;
 import tech.hackerlife.sim.display.GraphingTool;
-import tech.hackerlife.sim.display.gui.GUIManager;
-import tech.hackerlife.sim.display.gui.Mouse;
-import tech.hackerlife.sim.display.gui.button.Button;
-import tech.hackerlife.sim.maths.Vector2D;
+import tech.hackerlife.gui.*;
+import tech.hackerlife.math.Vector2f;
 import tech.hackerlife.sim.physics.ObjectManager;
 import tech.hackerlife.sim.physics.matter.Block;
 
@@ -43,7 +41,7 @@ public class SimPanel extends Panel {
 		
 		// Physics Stuff
 		objectManager = new ObjectManager();
-		m1 = new Block(mass, new Vector2D(0,0), new Vector2D(1, 0), 1f, 3f).withColor(Color.BLUE).withName("Rocket");
+		m1 = new Block(mass, new Vector2f(0,0), new Vector2f(1, 0), 1f, 3f).withColor(Color.BLUE).withName("Rocket");
 		objectManager.add(m1);
 
 		// Add gravity

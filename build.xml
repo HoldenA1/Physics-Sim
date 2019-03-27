@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!-- Configuration of the Ant build system to generate a Jar file --> 
+<project name="PhyicsSimBuilder" default="" >
+	<mkdir dir="lib"/>
+	<get 
+	   src="https://raw.githubusercontent.com/HoldenA1/GUI-lib/master/jar/GUI-lib.jar" 
+	   dest="lib">
+	</get>
+	<get 
+	   src="https://raw.githubusercontent.com/HoldenA1/Grapher-lib/master/jar/Grapher-lib.jar" 
+	   dest="lib">
+	</get>
+	<get 
+	   src="https://raw.githubusercontent.com/HoldenA1/Math-lib/master/jar/Math-lib.jar" 
+	   dest="lib">
+	</get>
+</project>

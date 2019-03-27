@@ -3,9 +3,7 @@ package tech.hackerlife.sim.display.panels;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
-import tech.hackerlife.sim.display.gui.GUIManager;
-import tech.hackerlife.sim.display.gui.Mouse;
-import tech.hackerlife.sim.display.gui.button.Button;
+import tech.hackerlife.gui.*;
 
 public class MainMenuPanel extends Panel {
 	// GUI Objects
@@ -26,7 +24,7 @@ public class MainMenuPanel extends Panel {
 		gui.updateElements(g, panel, mouse);
 		
 		if (startSimButton.isPressed()) {
-			PanelManager.selectedPanel = PanelList.SIM_PANEL;
+			PanelManager.selectedPanel = PanelManager.PanelList.SIM_PANEL;
 		}
 	}
 

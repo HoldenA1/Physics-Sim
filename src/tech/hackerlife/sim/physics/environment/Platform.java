@@ -3,7 +3,7 @@ package tech.hackerlife.sim.physics.environment;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import tech.hackerlife.sim.maths.Vector2D;
+import tech.hackerlife.math.Vector2f;
 import tech.hackerlife.sim.physics.Thing;
 
 public class Platform extends Thing {
@@ -11,7 +11,7 @@ public class Platform extends Thing {
 	/**
 	 * All parameters are in meters
 	 */
-	public Platform(Vector2D position, float width, float height) {
+	public Platform(Vector2f position, float width, float height) {
 		super(position, width, height);
 		numberOfPlatforms++;
 		name = "Platform " + Integer.toString(numberOfPlatforms);
@@ -24,7 +24,7 @@ public class Platform extends Thing {
 	
 	public void draw(Graphics g, float scale) {
 		// Translates from world-space to screen-space
-		Vector2D scaledPos = position.mult(scale);
+		Vector2f scaledPos = position.mult(scale);
 		int scaledWidth = (int) (width * scale);
 		int scaleHeight = (int) (height * scale);
 	

@@ -2,9 +2,8 @@ package tech.hackerlife.sim.physics;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-
 import tech.hackerlife.sim.Main;
-import tech.hackerlife.sim.maths.Vector2D;
+import tech.hackerlife.math.Vector2f;
 import tech.hackerlife.sim.physics.matter.*;
 
 public class ObjectManager {
@@ -27,13 +26,13 @@ public class ObjectManager {
 	
 	public void addGravity() {
 		for (Matter m: matter) {
-			m.addConstantForce(new Vector2D(0, 9.8f*m.getMass()));
+			m.addConstantForce(new Vector2f(0, 9.8f*m.getMass()));
 		}
 	}
 	
 	public void removeGravity() {
 		for (Matter m: matter) {
-			m.removeConstantForce(new Vector2D(0, 9.8f*m.getMass()));
+			m.removeConstantForce(new Vector2f(0, 9.8f*m.getMass()));
 		}
 	}
 	

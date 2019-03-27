@@ -2,9 +2,14 @@ package tech.hackerlife.sim.display.panels;
 
 import java.awt.Graphics;
 import javax.swing.JPanel;
-import tech.hackerlife.sim.display.gui.Mouse;
+import tech.hackerlife.gui.*;
 
 public class PanelManager {
+	
+	public enum PanelList {
+		MAIN_MENU, SIM_PANEL
+	}
+	
 	public static PanelList selectedPanel = PanelList.MAIN_MENU;
 	
 	// Panels

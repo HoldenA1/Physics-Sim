@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
-import tech.hackerlife.sim.maths.Vector2D;
+import tech.hackerlife.math.Vector2f;
 
 public class Ball extends Matter {
 	private static int numberOfBalls = 0;
@@ -15,13 +15,13 @@ public class Ball extends Matter {
 	 * @param width In meters
 	 * @param height In meters
 	 */
-	public Ball(float mass, Vector2D position, Vector2D velocity, float radius) {
+	public Ball(float mass, Vector2f position, Vector2f velocity, float radius) {
 		super(mass, position, velocity, radius);
 		numberOfBalls++;
 		name = "Ball " + Integer.toString(numberOfBalls);
 	}
 	
-	public Ball withAcceleration(Vector2D acceleraton) {
+	public Ball withAcceleration(Vector2f acceleraton) {
 		super.withAcceleration(acceleraton);
 		return this;
 	}
@@ -38,7 +38,7 @@ public class Ball extends Matter {
 
 	public void draw(Graphics g, float scale) {
 		// Translates from world-space to screen-space
-		Vector2D scaledPos = position.mult(scale);
+		Vector2f scaledPos = position.mult(scale);
 		int scaledRad = (int) (radius * scale);
 	
 		// Translates the center of the block to pos
