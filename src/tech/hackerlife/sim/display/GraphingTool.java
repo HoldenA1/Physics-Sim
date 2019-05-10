@@ -55,6 +55,7 @@ public class GraphingTool extends JPanel {
 	ArrayList<String> thingsToGraph = new ArrayList<String>();
 	Graph graph;
 	private int updates = 0;
+	private boolean repaint = true;
 	
 	public GraphingTool(ObjectManager manager) {
 		mouse = new Mouse();
@@ -97,7 +98,7 @@ public class GraphingTool extends JPanel {
 		gui.add(yAxis);
 		
 		// Creates the window
-		Window graphingToolFrame = new Window(NAME, WIDTH, HEIGHT).changeCloseOperation(JFrame.DISPOSE_ON_CLOSE).setResizeable(true);	
+		Window graphingToolFrame = new Window(NAME, WIDTH, HEIGHT).changeCloseOperation(JFrame.DISPOSE_ON_CLOSE).setResizeable(true);
 		graphingToolFrame.add(this);
 	}
 	
@@ -154,11 +155,18 @@ public class GraphingTool extends JPanel {
 			}
 			break;
 		case GRAPHING:
-			graph.draw(g);
+			graph.draw(g, this);
+			repaint = false;
 			break;
 		}
 		
-		repaint();
+		if (repaint) {
+			repaint();
+		}
+	}
+	
+	public void reset() {
+//		grap
 	}
 	
 	public void update() {
@@ -223,6 +231,7 @@ public class GraphingTool extends JPanel {
 	}
 	
 	class ResizeListener extends ComponentAdapter {
+		@Override
         public void componentResized(ComponentEvent e) {
         	if (!(graph == null)) {
         		graph.resize(e.getComponent().getSize().width - WIDTH_OFFSET, e.getComponent().getSize().height);

@@ -10,14 +10,14 @@ public class PanelManager {
 		MAIN_MENU, SIM_PANEL
 	}
 	
-	public static PanelList selectedPanel = PanelList.MAIN_MENU;
+	public static PanelList selectedPanel = PanelList.SIM_PANEL;
 	
 	// Panels
 	MainMenuPanel mainMenuPanel;
 	SimPanel simPanel;
 	
 	public PanelManager(int width, int height) {
-		simPanel = new SimPanel(width, height-40);
+		simPanel = new OrbitalSim(width, height-40);
 		mainMenuPanel = new MainMenuPanel(width, height-40);
 	}
 	

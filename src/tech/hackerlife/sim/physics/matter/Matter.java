@@ -15,28 +15,15 @@ public abstract class Matter extends Thing {
 	private Vector2f acceleration = new Vector2f(0,0);
 	private Vector2f forcesSum = new Vector2f(0,0);
 	private ArrayList<Vector2f> constantForces = new ArrayList<Vector2f>();
+	private ArrayList<Vector2f> forces = new ArrayList<Vector2f>();
 	
 	// Part of the collision stuff
 	public boolean translate = true;
 	
-	public Matter(float mass, Vector2f position, Vector2f velocity, float width, float height) {
-		super(position, width, height);
+	public Matter(float mass, Vector2f position, Vector2f velocity) {
+		super(position);
 		this.mass = mass;
-		if (velocity == null) {
-			this.velocity = new Vector2f(0,0);
-		} else {
-			this.velocity = velocity;
-		}
-	}
-	
-	public Matter(float mass, Vector2f position, Vector2f velocity, float radius) {
-		super(position, radius);
-		this.mass = mass;
-		if (velocity == null) {
-			this.velocity = new Vector2f(0,0);
-		} else {
-			this.velocity = velocity;
-		}
+		this.velocity = velocity;
 	}
 	
 	public Matter withColor(Color color) {
@@ -78,7 +65,12 @@ public abstract class Matter extends Thing {
 		return false;
 	}
 	
+	/**
+	 * Only acts for the next update
+	 * @param force
+	 */
 	public void addForce(Vector2f force) {
+		forces.add(force);
 		forcesSum = forcesSum.add(force);
 	}
 	
@@ -86,12 +78,12 @@ public abstract class Matter extends Thing {
 		for (Vector2f force: constantForces) {
 			force.drawVector(g, position, scale, Color.YELLOW);
 		}
+		for (Vector2f force: forces) {
+			force.drawVector(g, position, scale, Color.YELLOW);
+		}
 	}
 	
-	public void update(float scale, ArrayList<Thing> things) {
-		// Resets the net force to zero (it is summed every time)
-		forcesSum = new Vector2f(0,0);
-		
+	public void update(ArrayList<Thing> things) {
 		// Gets the net force on the object
 		for (Vector2f f: constantForces) {
 			forcesSum = forcesSum.add(f);
@@ -104,6 +96,10 @@ public abstract class Matter extends Thing {
 		
 		// Update velocity
 		velocity = velocity.add(acceleration.divideScalar(Main.realTimeUPS));
+		
+		// Resets the net force to zero (it is summed every time)
+		forcesSum = Vector2f.ZERO;
+		forces = new ArrayList<Vector2f>();
 	}
 	
 	// Pls make look better it are spegett code

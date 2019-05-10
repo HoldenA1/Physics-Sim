@@ -3,7 +3,6 @@ package tech.hackerlife.sim.physics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import tech.hackerlife.sim.Main;
-import tech.hackerlife.math.Vector2f;
 import tech.hackerlife.sim.physics.matter.*;
 
 public class ObjectManager {
@@ -11,6 +10,10 @@ public class ObjectManager {
 	private ArrayList<Thing> things;
 	
 	public ObjectManager() {
+		reset();
+	}
+	
+	public void reset() {
 		matter = new ArrayList<Matter>();
 		things = new ArrayList<Thing>();
 	}
@@ -24,18 +27,6 @@ public class ObjectManager {
 		things.add(element);
 	}
 	
-	public void addGravity() {
-		for (Matter m: matter) {
-			m.addConstantForce(new Vector2f(0, 9.8f*m.getMass()));
-		}
-	}
-	
-	public void removeGravity() {
-		for (Matter m: matter) {
-			m.removeConstantForce(new Vector2f(0, 9.8f*m.getMass()));
-		}
-	}
-	
 	public void draw(Graphics g, float scale) {
 		for (Thing t: things) {
 			t.draw(g, scale);
@@ -44,7 +35,7 @@ public class ObjectManager {
 	
 	public void update(float scale) {
 		for (Thing t: things) {
-			t.update(scale, things);
+			t.update(things);
 		}
 		for (Matter m: matter) {
 			if (m.translate) {

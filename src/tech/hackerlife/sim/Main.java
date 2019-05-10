@@ -11,7 +11,7 @@ public class Main extends JPanel {
 	private final static String NAME = "Physics Simulation";
 	private final static int WIDTH = 1280, HEIGHT = 720;
 	private static final long serialVersionUID = 1L;
-	public final static float SCALE = 10; // Pixels per meter
+	public final static float SCALE = 0.5f; // Pixels per meter
 	
 	// Update loop variables
 	private long lastTime = System.nanoTime();
@@ -40,6 +40,7 @@ public class Main extends JPanel {
 		frame.add(new Main());
 	}
 	
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.setBackground(Color.LIGHT_GRAY);
