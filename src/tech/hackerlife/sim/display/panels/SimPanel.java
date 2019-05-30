@@ -61,7 +61,8 @@ public abstract class SimPanel extends Panel {
 		g.drawLine(MENU_LOCATION-50, 0, MENU_LOCATION-50, height+100);
 		
 		// Draw Objects
-		g.translate((int)centerpoint.X(), (int)centerpoint.Y());
+//		g.translate((int)centerpoint.X(), (int)centerpoint.Y());
+		g.translate(0, height);
 		objectManager.draw(g, scale);
 		
 	}
@@ -73,13 +74,13 @@ public abstract class SimPanel extends Panel {
 //		graphingTools.forEach();
 	}
 	
-	private void pause() {
+	protected void pause() {
 		Main.ups = 0.0;
 		playButton.setVisibility(true);
 		pauseButton.setVisibility(false);
 	}
 	
-	private void play() {
+	protected void play() {
 		Main.ups = 50.0;
 		playButton.setVisibility(false);
 		pauseButton.setVisibility(true);

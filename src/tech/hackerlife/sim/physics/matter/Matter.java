@@ -74,12 +74,16 @@ public abstract class Matter extends Thing {
 		forcesSum = forcesSum.add(force);
 	}
 	
+	/**
+	 * @param g
+	 * @param scale refers to how much you want to scale up or down the vectors
+	 */
 	public void drawForces(Graphics g, float scale) {
 		for (Vector2f force: constantForces) {
-			force.drawVector(g, position, scale, Color.YELLOW);
+			force.mult(scale).drawVector(g, position, Main.SCALE, Color.YELLOW);
 		}
 		for (Vector2f force: forces) {
-			force.drawVector(g, position, scale, Color.YELLOW);
+			force.mult(scale).drawVector(g, position, Main.SCALE, Color.YELLOW);
 		}
 	}
 	
