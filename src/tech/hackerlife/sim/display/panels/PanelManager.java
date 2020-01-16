@@ -3,6 +3,8 @@ package tech.hackerlife.sim.display.panels;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 import tech.hackerlife.gui.*;
+import tech.hackerlife.sim.simulations.*;
+import tech.hackerlife.sim.simulations.SimPanel;
 
 public class PanelManager {
 	
@@ -10,7 +12,7 @@ public class PanelManager {
 		MAIN_MENU, SIM_PANEL
 	}
 	
-	public static PanelList selectedPanel = PanelList.SIM_PANEL;
+	public static PanelList selectedPanel = PanelList.MAIN_MENU;
 	
 	// Panels
 	MainMenuPanel mainMenuPanel;
@@ -18,6 +20,7 @@ public class PanelManager {
 	
 	public PanelManager(int width, int height) {
 		simPanel = new OrbitalSim(width, height-40);
+//		simPanel = new RobotSim(width, height-40);
 		mainMenuPanel = new MainMenuPanel(width, height-40);
 	}
 	
@@ -35,10 +38,10 @@ public class PanelManager {
 	public void update(float scale) {
 		switch(selectedPanel) {
 		case MAIN_MENU:
-			mainMenuPanel.update(scale);
+			mainMenuPanel.update();
 			break;
 		case SIM_PANEL:
-			simPanel.update(scale);
+			simPanel.update();
 			break;
 		}
 	}

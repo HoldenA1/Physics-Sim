@@ -1,4 +1,4 @@
-package tech.hackerlife.sim.display.panels;
+package tech.hackerlife.sim.simulations;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import tech.hackerlife.sim.Main;
 import tech.hackerlife.sim.display.GraphingTool;
+import tech.hackerlife.sim.display.panels.Panel;
 import tech.hackerlife.gui.*;
 import tech.hackerlife.math.Vector2f;
 import tech.hackerlife.sim.physics.ObjectManager;
@@ -19,7 +20,7 @@ public abstract class SimPanel extends Panel {
 	private final int MENU_LOCATION = 900;
 	private Vector2f centerpoint;
 
-	public SimPanel (int width, int height) {
+	public SimPanel(int width, int height) {
 		super(width, height);
 		
 		// GUI stuff
@@ -61,32 +62,33 @@ public abstract class SimPanel extends Panel {
 		g.drawLine(MENU_LOCATION-50, 0, MENU_LOCATION-50, height+100);
 		
 		// Draw Objects
-		g.translate((int)centerpoint.X(), (int)centerpoint.Y());
+		g.translate((int)centerpoint.x, (int)centerpoint.y);
 		objectManager.draw(g, scale);
-		
 	}
 	
 	/**
 	 * Initialize all objects used in the sim here
 	 */
 	protected void reset() {
-//		graphingTools.forEach();
+		for (GraphingTool gt: graphingTools) {
+			gt.reset();
+		}
 	}
 	
 	private void pause() {
-		Main.ups = 0.0;
+		Main.running = false;
 		playButton.setVisibility(true);
 		pauseButton.setVisibility(false);
 	}
 	
 	private void play() {
-		Main.ups = 50.0;
+		Main.running = true;
 		playButton.setVisibility(false);
 		pauseButton.setVisibility(true);
 	}
 	
-	public void update(float scale) {
-		objectManager.update(scale);
+	public void update() {
+		objectManager.update();
 		
 		for (GraphingTool g: graphingTools) {
 			g.update();

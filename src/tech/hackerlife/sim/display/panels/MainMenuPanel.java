@@ -28,7 +28,7 @@ public class MainMenuPanel extends Panel {
 		}
 	}
 
-	public void update(float scale) {
+	public void update() {
 	}
 
 }
