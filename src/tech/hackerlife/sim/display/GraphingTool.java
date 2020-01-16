@@ -166,7 +166,7 @@ public class GraphingTool extends JPanel {
 	}
 	
 	public void reset() {
-//		grap
+		graph.reset();
 	}
 	
 	public void update() {
@@ -181,15 +181,15 @@ public class GraphingTool extends JPanel {
 					String thingToGraph = thingsToGraph.get(i);
 					float position, velocity, acceleration, force;
 					if (graphX) {
-						position = selectedObject.getPosition().X();
-						velocity = selectedObject.getVelocity().X();
-						acceleration = selectedObject.getAcceleration().X();
-						force = selectedObject.getForce().X();
+						position = selectedObject.getPosition().x;
+						velocity = selectedObject.getVelocity().x;
+						acceleration = selectedObject.getAcceleration().x;
+						force = selectedObject.getForce().x;
 					} else {
-						position = selectedObject.getPosition().Y();
-						velocity = selectedObject.getVelocity().Y();
-						acceleration = selectedObject.getAcceleration().Y();
-						force = selectedObject.getForce().Y();
+						position = selectedObject.getPosition().y;
+						velocity = selectedObject.getVelocity().y;
+						acceleration = selectedObject.getAcceleration().y;
+						force = selectedObject.getForce().y;
 					}
 					if (thingToGraph.equals(displayDataBoxLabels[0])) values.add(position);
 					else if (thingToGraph.equals(displayDataBoxLabels[1])) values.add(velocity);

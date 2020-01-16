@@ -3,7 +3,8 @@ package tech.hackerlife.sim;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
-import tech.hackerlife.gui.*;
+import tech.hackerlife.gui.Mouse;
+import tech.hackerlife.gui.Window;
 import tech.hackerlife.sim.display.panels.PanelManager;
 
 public class Main extends JPanel {
@@ -14,6 +15,8 @@ public class Main extends JPanel {
 	public final static float SCALE = 0.5f; // Pixels per meter
 	
 	// Update loop variables
+	public static boolean running = false;
+	private static final long SLEEP_INTERVAL = 20; // Milliseconds
 	private long lastTime = System.nanoTime();
 	private long timer = System.currentTimeMillis();
 	private double ns = 1000000000.0 / ups;
@@ -22,7 +25,7 @@ public class Main extends JPanel {
 	
 	// When ups is 50, things move in real-time
 	public static final float realTimeUPS = 50.0f;
-	public static double ups = 0.0;
+	public static double ups = 50.0;
 	
 	// Panels
 	PanelManager pm = new PanelManager(WIDTH, HEIGHT);
@@ -47,7 +50,12 @@ public class Main extends JPanel {
 		
 		pm.draw(g, this, mouse, SCALE);
 		
-		update();
+		if (running) {
+			update();
+		} else {
+			sleep(SLEEP_INTERVAL);
+			lastTime = System.nanoTime();
+		}
 		
 		repaint();
 	}
@@ -72,6 +80,14 @@ public class Main extends JPanel {
 			timer += 1000;
 			System.out.println("ups: " + updates);
 			updates = 0;
+		}
+	}
+	
+	private void sleep(long millis) {
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 

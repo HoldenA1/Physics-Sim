@@ -5,9 +5,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 import tech.hackerlife.math.Vector2f;
-import tech.hackerlife.sim.physics.Thing;
 import tech.hackerlife.sim.physics.matter.Ball;
-import tech.hackerlife.sim.physics.matter.Matter;
 
 public class Planet extends Ball {
 	
@@ -30,14 +28,14 @@ public class Planet extends Ball {
 	}
 	
 	@Override
-	public Planet withColor(Color color) {
-		super.withColor(color);
+	public Planet withName(String name) {
+		super.withName(name);
 		return this;
 	}
 	
 	@Override
-	public Planet withName(String name) {
-		super.withName(name);
+	public Planet withColor(Color color) {
+		super.withColor(color);
 		return this;
 	}
 	
@@ -48,20 +46,14 @@ public class Planet extends Ball {
 	}
 	
 	@Override
-	public void update(ArrayList<Thing> things) {
-		super.update(things);
-		
-		// Adds gravity
-		for (Thing t: things) {
-			if (t.isMatter() && !this.equals(t)) {
-				Matter m = (Matter) t;
-				
-				// Calculated the direction and magnitude of gravity
-				Vector2f distance = m.getPosition().add(this.getPosition().mult(-1));
-				float magnitude = (G * this.getMass() * m.getMass()) / (distance.mag() * distance.mag());
-				addForce(new Vector2f(distance.dir(), magnitude));
-			}
-		}
+	public void moveTo(Vector2f position) {
+		super.moveTo(position);
+		trail = new ArrayList<Vector2f>();
+	}
+	
+	@Override
+	public void update(float dt) {
+		super.update(dt);
 		
 		// Adds points to the trail
 		Vector2f pt = position;
@@ -83,6 +75,21 @@ public class Planet extends Ball {
 			Point p = point.scale(scale);
 			g.fillOval(p.x, p.y, size, size);
 		}
+	}
+	
+	public Vector2f calculateGravitationalForce(Planet o1, Planet o2) {
+		Vector2f distance;
+		float magnitude;
+		
+		distance = o1.getPosition().add(this.getPosition().mult(-1));
+		magnitude = (G * this.getMass() * o1.getMass()) / (distance.mag() * distance.mag());
+		Vector2f f1 = new Vector2f(distance.dir(), magnitude);
+		
+		distance = o2.getPosition().add(this.getPosition().mult(-1));
+		magnitude = (G * this.getMass() * o2.getMass()) / (distance.mag() * distance.mag());
+		Vector2f f2 = new Vector2f(distance.dir(), magnitude);
+		
+		return f1.add(f2);
 	}
 
 }
